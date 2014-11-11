@@ -2,10 +2,10 @@
 <merger version="2" >
 
     <dataSet config="main" >
-        <source path="C:\Users\Rafael Farias\Desktop\matc89\GradeWEB\parseloginui\src\main\assets" />
+        <source path="C:\Users\Rafael Farias\Documents\GitHub\DispMoveisGrupo1\GradeWEB\parseloginui\src\main\assets" />
     </dataSet>
     <dataSet config="release" >
-        <source path="C:\Users\Rafael Farias\Desktop\matc89\GradeWEB\parseloginui\src\release\assets" />
+        <source path="C:\Users\Rafael Farias\Documents\GitHub\DispMoveisGrupo1\GradeWEB\parseloginui\src\release\assets" />
     </dataSet>
 
 </merger>

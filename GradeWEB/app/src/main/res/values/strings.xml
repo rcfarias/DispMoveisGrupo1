@@ -16,6 +16,9 @@
     <string name="profile_title_logged_out">You must be logged in to view your profile</string>
     <string name="profile_login_button_label">Log in</string>
 
+    <string name="drawer_open">Open drawer</string>
+    <string name="drawer_close">Close drawer</string>
+
 <!--
     <string name="login">Log In</string>
     <string name="logout">Log Out</string>
