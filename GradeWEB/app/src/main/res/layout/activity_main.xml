@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    android:background="#000000">
+    android:background="#e0e0e0">
 
     <include
         layout="@layout/com_gradeweb_login_app_logo"
@@ -27,7 +27,8 @@
         android:textColor="#ffffff"
         android:id="@+id/btn_con_grade"
         android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="10dp"/>
+        android:layout_marginBottom="10dp"
+        android:background="@android:color/darker_gray"/>
 
     <Button
         android:layout_width="match_parent"
@@ -36,7 +37,8 @@
         android:textColor="#ffffff"
         android:id="@+id/btn_cons_cursos"
         android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="10dp"/>
+        android:layout_marginBottom="10dp"
+        android:background="@android:color/darker_gray"/>
 
     <Button
         android:layout_width="match_parent"
@@ -45,7 +47,8 @@
         android:textColor="#ffffff"
         android:id="@+id/btn_con_disciplinas"
         android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="10dp"/>
+        android:layout_marginBottom="10dp"
+        android:background="@android:color/darker_gray"/>
 
         <Button
             android:layout_width="match_parent"
@@ -54,7 +57,8 @@
             android:textColor="#ffffff"
             android:id="@+id/btn_logout"
             android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="10dp"/>
+            android:layout_marginBottom="10dp"
+            android:background="@android:color/darker_gray"/>
 
     </LinearLayout>
 </LinearLayout>

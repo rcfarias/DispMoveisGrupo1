@@ -7,7 +7,7 @@
     android:paddingBottom="@dimen/com_parse_ui_vertical_margin"
     android:gravity="center"
     android:orientation="vertical"
-    android:background="#000000">
+    android:background="#e0e0e0">
 
     <include
         layout="@layout/com_gradeweb_login_app_logo"

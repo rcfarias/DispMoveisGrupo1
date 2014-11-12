@@ -11,20 +11,52 @@
     <string name="msg_app">GradeWEB v 1.0</string>
 
     <string name="profile_logo_content_description">Logo</string>
-    <string name="profile_title_logged_in">Your are logged in as</string>
+    <string name="profile_title_logged_in">Você está conectado como</string>
     <string name="profile_logout_button_label">Log out</string>
-    <string name="profile_title_logged_out">You must be logged in to view your profile</string>
+    <string name="profile_title_logged_out">Faça login para ver o seu perfil</string>
     <string name="profile_login_button_label">Log in</string>
 
     <string name="drawer_open">Open drawer</string>
     <string name="drawer_close">Close drawer</string>
 
-<!--
-    <string name="login">Log In</string>
-    <string name="logout">Log Out</string>
-    <string name="login_intro">Check out your Facebook profile by logging in with the button below!</string>
-    <string name="gender">Gender</string>
-    <string name="email">Email</string>
--->
+    <string name="com_parse_ui_logo_content_description">Logo</string>
+    <string name="com_parse_ui_progress_dialog_text">Carregando...</string>
+    <string name="com_parse_ui_username_input_hint">Usuário</string>
+    <string name="com_parse_ui_password_input_hint">Senha</string>
+    <string name="com_parse_ui_forgot_password_button_label"><u>Forgot password</u></string>
+    <string name="com_parse_ui_parse_login_button_label">Log in</string>
+    <string name="com_parse_ui_parse_signup_button_label">Sign up</string>
+    <string name="com_parse_ui_facebook_login_button_label">Log in with Facebook</string>
+    <string name="com_parse_ui_twitter_login_button_label">Log in with Twitter</string>
+    <string name="com_parse_ui_email_input_hint">Email</string>
+    <string name="com_parse_ui_confirm_password_input_hint">Confirmar senha</string>
+    <string name="com_parse_ui_name_input_hint">Nome</string>
+    <string name="com_parse_ui_create_account_button_label">Create account</string>
+    <string name="com_parse_ui_no_username_toast">Por favor, infomre seu usuário</string>
+    <string name="com_parse_ui_no_password_toast">Por favor, infomre sua senha</string>
+    <string name="com_parse_ui_parse_login_invalid_credentials_toast">O usuário e/ou a senha informada estão errados</string>
+    <string name="com_parse_ui_parse_login_failed_unknown_toast">Não foi possível fazer login. Por favor tente novamente mais tarde</string>
+    <string name="com_parse_ui_facebook_login_failed_toast">Facebook login failed</string>
+    <string name="com_parse_ui_twitter_login_failed_toast">Twitter login failed</string>
+
+    <plurals name="com_parse_ui_password_too_short_toast">
+        <item quantity="one">Password must be at least %d character long</item>
+        <item quantity="other">Password must be at least %d characters long</item>
+    </plurals>
+
+    <string name="com_parse_ui_username_taken_toast">Username is already taken, please choose a different one</string>
+    <string name="com_parse_ui_reenter_password_toast">Please re-enter your password</string>
+    <string name="com_parse_ui_mismatch_confirm_password_toast">Passwords don\'t match, please try again</string>
+    <string name="com_parse_ui_no_email_toast">Please enter your email</string>
+    <string name="com_parse_ui_invalid_email_toast">Email is invalid, please correct it and try again</string>
+    <string name="com_parse_ui_email_taken_toast">Email is already taken, please reset your password instead</string>
+    <string name="com_parse_ui_no_name_toast">Please enter your name</string>
+    <string name="com_parse_ui_signup_failed_unknown_toast">Could not sign up, please try again later</string>
+    <string name="com_parse_ui_login_help_instructions">Digite o seu email para recupera a sua senha</string>
+    <string name="com_parse_ui_login_help_email_input_hint">Email</string>
+    <string name="com_parse_ui_login_help_submit_button_label">Submit</string>
+    <string name="com_parse_ui_login_help_login_again_button_label">Back to Login</string>
+    <string name="com_parse_ui_login_help_submit_failed_unknown">Failed to request password reset, please try again</string>
+    <string name="com_parse_ui_login_help_email_sent">Please check your email for instructions on how to access your account</string>
 
 </resources>
