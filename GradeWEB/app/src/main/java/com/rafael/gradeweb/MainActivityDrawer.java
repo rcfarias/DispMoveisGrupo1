@@ -17,6 +17,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.parse.ParseUser;
+
 public class MainActivityDrawer extends Activity {
 
     private DrawerLayout mDrawerLayout;
@@ -28,6 +30,8 @@ public class MainActivityDrawer extends Activity {
     CustomDrawerAdapter adapter;
 
     List<DrawerItem> dataList;
+
+    private ParseUser currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +62,7 @@ public class MainActivityDrawer extends Activity {
         dataList.add(new DrawerItem("About", R.drawable.ic_action_about));
         dataList.add(new DrawerItem("Settings", R.drawable.ic_action_settings));
         dataList.add(new DrawerItem("Help", R.drawable.ic_action_help));
+        dataList.add(new DrawerItem("Log Out", R.drawable.ic_action_logout_dark));
 
         adapter = new CustomDrawerAdapter(this, R.layout.custom_drawer_item,
                 dataList);
@@ -195,6 +200,17 @@ public class MainActivityDrawer extends Activity {
                         .getItemName());
                 args.putInt(FragmentOne.IMAGE_RESOURCE_ID, dataList.get(possition)
                         .getImgResID());
+                break;
+            case 13:
+                fragment = new FragmentTwo();
+                args.putString(FragmentTwo.ITEM_NAME, dataList.get(possition)
+                        .getItemName());
+                args.putInt(FragmentTwo.IMAGE_RESOURCE_ID, dataList.get(possition)
+                        .getImgResID());
+                // User clicked to log out.
+                //ParseUser.logOut();
+                //currentUser = null;
+                //finish();
                 break;
             default:
                 break;

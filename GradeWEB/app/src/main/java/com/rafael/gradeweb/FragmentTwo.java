@@ -25,15 +25,20 @@ public class FragmentTwo   extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view=inflater.inflate(R.layout.fragment_layout_two,container, false);
+        if((getArguments().getString(ITEM_NAME) == "Log Out")) {
+             getActivity().finish();
+        }
 
-        ivIcon=(ImageView)view.findViewById(R.id.frag2_icon);
-        tvItemName=(TextView)view.findViewById(R.id.frag2_text);
+        View view = inflater.inflate(R.layout.fragment_layout_two, container, false);
+
+        ivIcon = (ImageView) view.findViewById(R.id.frag2_icon);
+        tvItemName = (TextView) view.findViewById(R.id.frag2_text);
 
         tvItemName.setText(getArguments().getString(ITEM_NAME));
         ivIcon.setImageDrawable(view.getResources().getDrawable(
                 getArguments().getInt(IMAGE_RESOURCE_ID)));
         return view;
+
     }
 
 }

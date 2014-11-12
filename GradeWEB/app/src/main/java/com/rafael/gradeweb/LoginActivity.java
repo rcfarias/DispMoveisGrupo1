@@ -83,7 +83,7 @@ public class LoginActivity extends Activity {
                             .setParseSignupButtonText("Cadastrar")
                             .setParseLoginHelpText("Esqueceu a senha?")
                             .setParseLoginInvalidCredentialsToastText("Seu email e/ou senha não está correto")
-                            .setParseLoginEmailAsUsername(false)
+                            .setParseLoginEmailAsUsername(true)
                             .setParseSignupSubmitButtonText("Registrar")
                             .setFacebookLoginEnabled(true)
                             .setFacebookLoginButtonText("Facebook")
