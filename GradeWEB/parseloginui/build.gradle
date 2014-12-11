@@ -4,7 +4,6 @@ dependencies {
     compile project(':facebook')
     compile 'com.android.support:support-v4:20.0.+'
     compile fileTree(dir: 'libs', include: '*.jar')
-
 }
 
 android {

@@ -1,7 +1,10 @@
 package com.rafael.gradeweb;
 
+//import com.rafael.gradeweb.GradeWEBApplication;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.lang.String;
 
 import android.os.Bundle;
 import android.app.Activity;
@@ -11,15 +14,20 @@ import android.content.res.Configuration;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
+import com.parse.Parse;
 import com.parse.ParseUser;
 
 public class MainActivityDrawer extends Activity {
+    private final String TAG = "TKT";
 
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
@@ -31,12 +39,22 @@ public class MainActivityDrawer extends Activity {
 
     List<DrawerItem> dataList;
 
+    FragmentManager frgManager;
+    Fragment fragment;
+
     private ParseUser currentUser;
+    private  GradeWEBApplication myApplication;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_drawer);
+
+        Log.d("GradeWEB", "@onCreate");
+
+        myApplication = GradeWEBApplication.getInstance();//(GradeWEBApplication) getApplicationContext();
+        myApplication.updateUsuario();
+        currentUser = myApplication.getUsuario();
 
         // Initializing
         dataList = new ArrayList<DrawerItem>();
@@ -44,15 +62,11 @@ public class MainActivityDrawer extends Activity {
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
-        mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow,
-                GravityCompat.START);
+        mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow,GravityCompat.START);
 
         // Add Drawer Item to dataList
-        dataList.add(new DrawerItem("Message", R.drawable.ic_action_email));
-        dataList.add(new DrawerItem("Likes", R.drawable.ic_action_good));
-        dataList.add(new DrawerItem("Games", R.drawable.ic_action_gamepad));
-        dataList.add(new DrawerItem("Lables", R.drawable.ic_action_labels));
-        dataList.add(new DrawerItem("Search", R.drawable.ic_action_search));
+        dataList.add(new DrawerItem("Semestres", R.drawable.ic_action_account));
+        dataList.add(new DrawerItem("User", R.drawable.ic_action_user));
         dataList.add(new DrawerItem("Cloud", R.drawable.ic_action_cloud));
         dataList.add(new DrawerItem("Camara", R.drawable.ic_action_camera));
         dataList.add(new DrawerItem("Video", R.drawable.ic_action_video));
@@ -93,42 +107,47 @@ public class MainActivityDrawer extends Activity {
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
         if (savedInstanceState == null) {
-            SelectItem(0);
+            SelectItem(1);
         }
 
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
     public void SelectItem(int possition) {
 
-        Fragment fragment = null;
+        fragment = null;
         Bundle args = new Bundle();
         switch (possition) {
             case 0:
+                fragment = new FragmentSemesterList();
+
+                ArrayList<String> semestres = new ArrayList<String>();
+                semestres.add("2009-1");
+                semestres.add("2009-2");
+                semestres.add("2010-1");
+                semestres.add("2010-2");
+                semestres.add("2011-1");
+                semestres.add("2011-2");
+                semestres.add("2012-1");
+                semestres.add("2012-2");
+                semestres.add("2013-1");
+                semestres.add("2014-1");
+                semestres.add("2014-2");
+
+                args.putStringArrayList("LISTA_SEMESTRES", semestres);
+                args.putString("NAME", currentUser.getString("name"));
+                args.putString("EMAIL", currentUser.getEmail());
+                break;
+            case 1:
+                fragment = new FragmentProfile();
+
+                args.putString("USER_NAME", currentUser.getString("name"));
+                args.putString("EMAIL", currentUser.getEmail());
+                break;
+            case 2:
                 fragment = new FragmentOne();
                 args.putString(FragmentOne.ITEM_NAME, dataList.get(possition)
                         .getItemName());
                 args.putInt(FragmentOne.IMAGE_RESOURCE_ID, dataList.get(possition)
-                        .getImgResID());
-                break;
-            case 1:
-                fragment = new FragmentTwo();
-                args.putString(FragmentTwo.ITEM_NAME, dataList.get(possition)
-                        .getItemName());
-                args.putInt(FragmentTwo.IMAGE_RESOURCE_ID, dataList.get(possition)
-                        .getImgResID());
-                break;
-            case 2:
-                fragment = new FragmentThree();
-                args.putString(FragmentThree.ITEM_NAME, dataList.get(possition)
-                        .getItemName());
-                args.putInt(FragmentThree.IMAGE_RESOURCE_ID, dataList.get(possition)
                         .getImgResID());
                 break;
             case 3:
@@ -139,17 +158,17 @@ public class MainActivityDrawer extends Activity {
                         .getImgResID());
                 break;
             case 4:
-                fragment = new FragmentTwo();
-                args.putString(FragmentTwo.ITEM_NAME, dataList.get(possition)
+                fragment = new FragmentOne();
+                args.putString(FragmentOne.ITEM_NAME, dataList.get(possition)
                         .getItemName());
-                args.putInt(FragmentTwo.IMAGE_RESOURCE_ID, dataList.get(possition)
+                args.putInt(FragmentOne.IMAGE_RESOURCE_ID, dataList.get(possition)
                         .getImgResID());
                 break;
             case 5:
-                fragment = new FragmentThree();
-                args.putString(FragmentThree.ITEM_NAME, dataList.get(possition)
+                fragment = new FragmentOne();
+                args.putString(FragmentOne.ITEM_NAME, dataList.get(possition)
                         .getItemName());
-                args.putInt(FragmentThree.IMAGE_RESOURCE_ID, dataList.get(possition)
+                args.putInt(FragmentOne.IMAGE_RESOURCE_ID, dataList.get(possition)
                         .getImgResID());
                 break;
             case 6:
@@ -160,64 +179,38 @@ public class MainActivityDrawer extends Activity {
                         .getImgResID());
                 break;
             case 7:
-                fragment = new FragmentTwo();
-                args.putString(FragmentTwo.ITEM_NAME, dataList.get(possition)
+                fragment = new FragmentOne();
+                args.putString(FragmentOne.ITEM_NAME, dataList.get(possition)
                         .getItemName());
-                args.putInt(FragmentTwo.IMAGE_RESOURCE_ID, dataList.get(possition)
+                args.putInt(FragmentOne.IMAGE_RESOURCE_ID, dataList.get(possition)
                         .getImgResID());
                 break;
             case 8:
-                fragment = new FragmentThree();
-                args.putString(FragmentThree.ITEM_NAME, dataList.get(possition)
+                fragment = new FragmentOne();
+                args.putString(FragmentOne.ITEM_NAME, dataList.get(possition)
                         .getItemName());
-                args.putInt(FragmentThree.IMAGE_RESOURCE_ID, dataList.get(possition)
+                args.putInt(FragmentOne.IMAGE_RESOURCE_ID, dataList.get(possition)
                         .getImgResID());
                 break;
             case 9:
                 fragment = new FragmentOne();
                 args.putString(FragmentOne.ITEM_NAME, dataList.get(possition)
                         .getItemName());
-                args.putInt(FragmentOne.IMAGE_RESOURCE_ID, dataList.get(possition)
-                        .getImgResID());
                 break;
             case 10:
-                fragment = new FragmentTwo();
-                args.putString(FragmentTwo.ITEM_NAME, dataList.get(possition)
-                        .getItemName());
-                args.putInt(FragmentTwo.IMAGE_RESOURCE_ID, dataList.get(possition)
-                        .getImgResID());
-                break;
-            case 11:
-                fragment = new FragmentThree();
-                args.putString(FragmentThree.ITEM_NAME, dataList.get(possition)
-                        .getItemName());
-                args.putInt(FragmentThree.IMAGE_RESOURCE_ID, dataList.get(possition)
-                        .getImgResID());
-                break;
-            case 12:
                 fragment = new FragmentOne();
                 args.putString(FragmentOne.ITEM_NAME, dataList.get(possition)
                         .getItemName());
                 args.putInt(FragmentOne.IMAGE_RESOURCE_ID, dataList.get(possition)
                         .getImgResID());
                 break;
-            case 13:
-                fragment = new FragmentTwo();
-                args.putString(FragmentTwo.ITEM_NAME, dataList.get(possition)
-                        .getItemName());
-                args.putInt(FragmentTwo.IMAGE_RESOURCE_ID, dataList.get(possition)
-                        .getImgResID());
-                // User clicked to log out.
-                //ParseUser.logOut();
-                //currentUser = null;
-                //finish();
-                break;
+
             default:
                 break;
         }
 
         fragment.setArguments(args);
-        FragmentManager frgManager = getFragmentManager();
+        frgManager = getFragmentManager();
         frgManager.beginTransaction().replace(R.id.content_frame, fragment)
                 .commit();
 
@@ -263,7 +256,26 @@ public class MainActivityDrawer extends Activity {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position,
                                 long id) {
-            SelectItem(position);
+
+            if(position != 10){
+                Log.d(TAG, "position != 10 @OnItemClickListener");
+                SelectItem(position);
+            }
+            else {
+                Log.d(TAG, "position == 10 @OnItemClickListener");
+                if(currentUser != null) {
+                    Log.d(TAG, "currentUser != null @OnItemClickListener");
+                    //ParseUser.logOut();
+                    //currentUser = null;
+                    myApplication.logoutUsuario();
+                    currentUser = myApplication.getUsuario();
+                    finish();
+                }
+                else {
+                    Log.d(TAG, "currentUser == null @OnItemClickListener");
+                }
+            }
+
 
         }
     }
