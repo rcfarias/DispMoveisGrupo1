@@ -116,6 +116,8 @@ public class ActivityAdicionarDisciplina extends Activity{
                         horario.get(0).saveInBackground();
 
                         GradeWEBApplication.getInstance().setHorario(horario.get(0));
+
+                        Toast.makeText(getApplicationContext(), "Disciplina adicionada com sucesso", 5000).show();
                     }
 
                     finish();

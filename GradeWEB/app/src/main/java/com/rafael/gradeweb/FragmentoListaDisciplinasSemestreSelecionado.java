@@ -2,8 +2,10 @@ package com.rafael.gradeweb;
 
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -79,6 +81,74 @@ public class FragmentoListaDisciplinasSemestreSelecionado extends Fragment{
 
         updateAdapter();
 
+        listaDisciplinas.setOnItemLongClickListener( new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long l) {
+                final ParseObject turma = (ParseObject) adapterView.getItemAtPosition(position);
+
+                // 1. Instantiate an AlertDialog.Builder with its constructor
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+                // 2. Chain together various setter methods to set the dialog characteristics
+                builder.setMessage("Isso removerá esta turma do seu horário")
+                        .setTitle("Excluir a turma selecionada?");
+
+                // Add the buttons
+                builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User clicked OK button
+                        ParseObject horario = GradeWEBApplication.getInstance().getHorario();
+                        List<ParseObject> listaTurmas = horario.getList("turmas");
+                        int index = -1;
+
+                        for( int j = 0; j < listaTurmas.size(); j++) {
+                            if(listaTurmas.get(j).getObjectId() == turma.getObjectId()) {
+                                index = j;
+                            }
+
+                        }
+
+                        if(index != -1) {
+                            listaTurmas.remove(index);
+
+                            horario.put("turmas", listaTurmas);
+
+                            try {
+                                horario.save();
+                                GradeWEBApplication.getInstance().setHorario(horario);
+
+                                Toast.makeText(getActivity().getApplicationContext(), "Disciplina removida do horário", 5000).show();
+
+                                updateAdapter();
+
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+
+                            FragmentoListaDisciplinasSemestreSelecionado f = (FragmentoListaDisciplinasSemestreSelecionado) getFragmentManager().findFragmentById(R.id.disciplinas_semestres_list_view);
+
+                            if(f != null) {
+                                f.updateAdapter();
+                            }
+                        }
+                        else
+                            Toast.makeText(getActivity().getApplicationContext(), "Não foi possível excluir!", 5000).show();
+                    }
+                });
+                builder.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User cancelled the dialog
+                    }
+                });
+
+                // 3. Get the AlertDialog from create()
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
+                return false;
+            }
+        });
+
         /*
         listaDisciplinas.setOnItemClickListener( new AdapterView.OnItemClickListener() {
             @Override
@@ -152,6 +222,7 @@ public class FragmentoListaDisciplinasSemestreSelecionado extends Fragment{
         mAdapter = new CustomAdapterListaDisciplinas(context, listaIdsTurmas);
         listaDisciplinas.setAdapter(mAdapter);
         mAdapter.loadObjects();
+        mAdapter.notifyDataSetInvalidated();
 
     }
 }
