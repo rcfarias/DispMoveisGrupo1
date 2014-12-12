@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,6 +30,7 @@ import java.util.List;
 public class FragmentoListaSemestresUsuario extends Fragment {
 
     private ListView listaSemestresListView;
+    private Button adicionarButton;
 
     private Context context;
     private FragmentManager frgManager;
@@ -48,6 +50,8 @@ public class FragmentoListaSemestresUsuario extends Fragment {
         View rootView = inflater.inflate(R.layout.layout_fragmento_lista_semesteres, container, false);
 
         listaSemestresListView = (ListView) rootView.findViewById(R.id.semestres_list_view);
+
+        adicionarButton = (Button) rootView.findViewById(R.id.adicionar_semestre_button);
 
         CustomListAdapter myAdapter = new CustomListAdapter(context);
 
@@ -83,6 +87,13 @@ public class FragmentoListaSemestresUsuario extends Fragment {
                 fragment.setArguments(args);
                 frgManager = getFragmentManager();
                 frgManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+            }
+        });
+
+        adicionarButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
             }
         });
 
