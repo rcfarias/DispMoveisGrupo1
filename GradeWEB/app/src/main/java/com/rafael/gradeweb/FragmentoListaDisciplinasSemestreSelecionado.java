@@ -1,6 +1,8 @@
 package com.rafael.gradeweb;
 
 
+import android.app.Activity;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
@@ -32,108 +34,118 @@ public class FragmentoListaDisciplinasSemestreSelecionado extends Fragment{
 
     private final String fimDeLinha = System.getProperty("line.separator");
 
-    private GradeWEBApplication myApp;
+    private Context context;
 
-    //private ListView disciplinasListView;
-    private TextView disciplinasTextView;
     private Button adicionarDisciplinaButton;
 
     private ParseObject horarioObject;
 
-    public FragmentoListaDisciplinasSemestreSelecionado() { }
+    public void setHorarioObject(ParseObject horario) {
+        this.horarioObject = horario;
+    }
+
+    public FragmentoListaDisciplinasSemestreSelecionado() {}
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        context = activity.getApplicationContext();
+    }
 
     @Override
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        myApp = GradeWEBApplication.getInstance();
+        String semestre = (String) getArguments().getString("semestre");
 
-        String horarioOjectId = (String) getArguments().getString("OBJECT_ID");
-
-        ParseQuery<ParseObject> horarioQuery = ParseQuery.getQuery("Horario");
-        horarioQuery.include("turmas");
-        horarioQuery.include("turmas.disciplina");
-        horarioQuery.whereEqualTo("objectId", (String) getArguments().getString("OBJECT_ID"))
-        //horarioQuery.fromLocalDatastore();
-
-        horarioObject = null;
-        try {
-            horarioObject = (ParseObject) horarioQuery.get(horarioOjectId);
-        } catch (ParseException e) {
-            e.printStackTrace();
-            Log.d("FragmentoListaDisciplinasSemestreSelecionado", "ERROR!! exception happened 1");
-        }
+        ArrayList listaIdsTurmas = getArguments().getStringArrayList("turmas_ids");
 
         View viewRaiz = inflater.inflate(R.layout.layout_fragmento_lista_disciplinas_semestre_selecionado, container, false);
 
         ListView listaDisciplinas = (ListView) viewRaiz.findViewById(R.id.disciplinas_semestres_list_view);
 
-
-        CustomAdapterListaDisciplinas mAdapter = new CustomAdapterListaDisciplinas(getActivity().getApplicationContext(), "Turma", "ENGG56");
+        CustomAdapterListaDisciplinas mAdapter = new CustomAdapterListaDisciplinas(context, listaIdsTurmas);
 
         listaDisciplinas.setAdapter(mAdapter);
         mAdapter.loadObjects();
 
-
-        //disciplinasListView = (ListView) viewRaiz.findViewById(R.id.disciplinas_semestres_list_view);
-     //   disciplinasTextView = (TextView) viewRaiz.findViewById(R.id.disciplinas_semestres_text_view);
-        adicionarDisciplinaButton = (Button)  viewRaiz.findViewById(R.id.adicionar_disciplina_button);
-/*
-        List<ParseObject> listaDeTurmasObjects = horarioObject.getList("turmas");
-
-        List<ParseObject> listaDisciplinasObjects = new ArrayList<ParseObject>();
-        //ArrayList detalhesTurma = new ArrayList();
-        String detalhesTurmas = "";
-
-        for( ParseObject cadaTurma : listaDeTurmasObjects) {
-            listaDisciplinasObjects.add(cadaTurma.getParseObject("disciplina"));
-
-            //detalhesTurma.add(cadaTurma.getParseObject("disciplina").getString("DID") + " " + cadaTurma.getParseObject("disciplina").getString("name") +
-            //                    fimDeLinha + "Turma: " + cadaTurma.getString("codigoTurma") + " / Professor: " + cadaTurma.getString("professor"));
-
-            detalhesTurmas += (cadaTurma.getParseObject("disciplina").getString("DID") + " " + cadaTurma.getParseObject("disciplina").getString("name") +
-                    fimDeLinha + "Turma: " + cadaTurma.getString("codigoTurma") + " / Professor: " + cadaTurma.getString("professor") + fimDeLinha + fimDeLinha);
-        }
-
-
-        disciplinasTextView.setText(detalhesTurmas);
-        //disciplinasTextView.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
-
-        //----------------------------------------------------------------------------------------------------
-
         /*
-        ArrayAdapter<ArrayList> meuAdapter = new ArrayAdapter<ArrayList>(this.getActivity(),
-                android.R.layout.simple_expandable_list_item_1,
-                detalhesTurma);
+        listaDisciplinas.setOnItemClickListener( new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapter, View view, int position, long id) {
+                //Toast.makeText(getActivity(), "You clicked" + (String) semestresList.get(position), 5000).show();
 
-        disciplinasListView.setAdapter(meuAdapter);
+                fragment = new FragmentoListaDisciplinasSemestreSelecionado();
+                Bundle args = new Bundle();
 
-        disciplinasListView.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
+                ParseObject horario = (ParseObject) adapter.getItemAtPosition(position);
+
+                List<ParseObject> listaTurmas = horario.getList("turmas");
+                ArrayList listaIdsTurmas = new ArrayList();
+
+                for(ParseObject cadaTurma : listaTurmas) {
+                    listaIdsTurmas.add(cadaTurma.getObjectId());
+                }
+
+                Toast.makeText(getActivity(), "semestre selecionado: " + (String) horario.getString("semestre"), 5000).show();
+
+                args.putString("semestre", horario.getString("semestre"));
+                args.putStringArrayList("turmas_ids", listaIdsTurmas);
+
+                fragment.setArguments(args);
+                frgManager = getFragmentManager();
+                frgManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+            }
+        });
         */
 
-        //-----------------------------------------------------------------------------------------------------
+        adicionarDisciplinaButton = (Button)  viewRaiz.findViewById(R.id.adicionar_disciplina_button);
 
         adicionarDisciplinaButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //String horarioOjectId = (String) getArguments().getString("OBJECT_ID");
-                //Intent intent = new Intent(getActivity(), ActivityAdicionarDisciplina.class);
-                //intent.putExtra("EXTRA_OBJECT_ID", (String) horarioOjectId);
-                //startActivity(intent);
-                //Toast.makeText(getActivity(), "objectId = " + (String) horarioOjectId, 5000).show();
 
-                ParseQuery<ParseObject> turmasQuery = ParseQuery.getQuery("Turmas");
-                turmasQuery.include("disciplina");
+                //Fragment fragment = new FragmentoListaDisciplinasSemestreSelecionado();
+        //        Bundle args = new Bundle();
 
-                List<ParseObject> listaTurmas = new ArrayList<ParseObject>();
+                //ParseObject horario = (ParseObject) adapter.getItemAtPosition(position);
 
-                try {
-                    listaTurmas = turmasQuery.find();
-                } catch (ParseException e) {
-                    e.printStackTrace();
+                //List<ParseObject> listaTurmas = horario.getList("turmas");
+                //ArrayList listaIdsTurmas = new ArrayList();
+
+                //for(ParseObject cadaTurma : listaTurmas) {
+                //    listaIdsTurmas.add(cadaTurma.getObjectId());
+                //}
+
+                //Toast.makeText(getActivity(), "semestre selecionado: " + (String) horario.getString("semestre"), 5000).show();
+
+                //args.putString("semestre", horario.getString("semestre"));
+                //args.putStringArrayList("turmas_ids", listaIdsTurmas);
+
+                //fragment.setArguments(args);
+
+                //FragmentManager frgManager = getFragmentManager();
+                //frgManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+
+        //        args.putStringArrayList("turmas_id", getArguments().getStringArrayList("turmas_ids"));
+
+        //        FragmentoSelecionarTurma f = new FragmentoSelecionarTurma();
+        //        f.setArguments(args);
+        //        f.show(getFragmentManager(), "meu dialog");
+
+                Intent intent = new Intent(getActivity().getApplicationContext(), ActivityAdicionarDisciplina.class);
+                //intent.putStringArrayListExtra("turmas_ids", getArguments().getStringArrayList("turmas_ids"));
+
+                Bundle args = new Bundle();
+                ArrayList l = getArguments().getStringArrayList("turmas_ids");
+
+                for(int i = 0; i < l.size() ; i++ ) {
+                    Toast.makeText(getActivity(), "turmaId: " + (String) l.get(i), 5000).show();
                 }
 
-                FragmentoSelecionarTurma f = new FragmentoSelecionarTurma();
-                f.show(getFragmentManager(), "meu dialog");
+                args.putStringArrayList("turmas_ids", l);
+                args.putString("semestre", getArguments().getString("semestre"));
+                intent.putExtras(args);
+                startActivity(intent, args);
             }
         });
 

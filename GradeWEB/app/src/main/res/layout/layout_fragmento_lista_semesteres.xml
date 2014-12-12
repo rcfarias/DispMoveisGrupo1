@@ -10,21 +10,31 @@
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="50dp"
         android:id="@+id/lista_semestres_text_view"
         android:text="Semestres com horários cadastrados"
-        android:textSize="25sp"
+        android:textSize="18sp"
         android:gravity="center"
         android:textColor="@color/text_color">
         </TextView>
 
     <ListView
         android:layout_width="match_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="390dp"
         android:paddingTop="5dp"
         android:id="@+id/semestres_list_view"
         android:layout_gravity="center">
 
         </ListView>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text="Adicionar novo horário"
+        android:id="@+id/adicionar_semestre_button"
+        android:layout_gravity="center_horizontal"
+        android:background="@android:color/darker_gray"
+        android:textColor="@color/text_color"/>
+
 
 </LinearLayout>

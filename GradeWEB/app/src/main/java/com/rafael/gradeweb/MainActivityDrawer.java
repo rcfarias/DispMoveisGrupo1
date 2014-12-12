@@ -29,7 +29,7 @@ public class MainActivityDrawer extends Activity {
 
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
-    CustomDrawerAdapter adapter;
+    private CustomDrawerAdapter adapter;
 
     List<DrawerItem> dataList;
 
@@ -43,6 +43,19 @@ public class MainActivityDrawer extends Activity {
     private List<ParseObject> horarios;
 
     @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        // Save UI state changes to the savedInstanceState.
+        // This bundle will be passed to onCreate if the process is
+        // killed and restarted.
+        //savedInstanceState.putBoolean("MyBoolean", true);
+        //savedInstanceState.putDouble("myDouble", 1.9);
+        savedInstanceState.putInt("position", mDrawerList.getSelectedItemPosition());
+        //savedInstanceState.putString("MyString", "Welcome back to Android");
+        // etc.
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_drawer);
@@ -52,10 +65,6 @@ public class MainActivityDrawer extends Activity {
         myApplication = GradeWEBApplication.getInstance();//(GradeWEBApplication) getApplicationContext();
         myApplication.updateUsuario();
         currentUser = myApplication.getUsuario();
-
-
-        // initial query for the user schedule
-
 
         // Initializing
         dataList = new ArrayList<DrawerItem>();
@@ -75,8 +84,7 @@ public class MainActivityDrawer extends Activity {
         dataList.add(new DrawerItem("Help", R.drawable.ic_action_help));
         dataList.add(new DrawerItem("Log Out", R.drawable.ic_action_logout_dark));
 
-        adapter = new CustomDrawerAdapter(this, R.layout.custom_drawer_item,
-                dataList);
+        adapter = new CustomDrawerAdapter(this, R.layout.custom_drawer_item,dataList);
 
         mDrawerList.setAdapter(adapter);
 
@@ -85,9 +93,10 @@ public class MainActivityDrawer extends Activity {
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setHomeButtonEnabled(true);
 
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
-                R.drawable.ic_drawer, R.string.drawer_open,
-                R.string.drawer_close) {
+        mDrawerToggle = new ActionBarDrawerToggle(this,
+                                                  mDrawerLayout,
+                                                  R.drawable.ic_drawer, R.string.drawer_open,
+                                                  R.string.drawer_close) {
             public void onDrawerClosed(View view) {
                 getActionBar().setTitle(mTitle);
                 invalidateOptionsMenu(); // creates call to
@@ -106,7 +115,9 @@ public class MainActivityDrawer extends Activity {
         if (savedInstanceState == null) {
             SelectItem(0);
         }
-
+        else {
+            SelectItem(savedInstanceState.getInt("position"));
+        }
     }
 
     public void SelectItem(int possition) {

@@ -23,30 +23,19 @@ public class FragmentoSelecionarTurma extends DialogFragment {
     private ParseObject horario;
     private ArrayList<String> listaItemTurmas;
 
-    public FragmentoSelecionarTurma() {//List<ParseObject> turmas) {//ParseObject horario ) {
-        /*
-        listaTurmas = turmas;
-
-        for(ParseObject turma : listaTurmas) {
-            ParseObject disciplina = turma.getParseObject("disciplina");
-            listaItemTurmas.add(disciplina.getString("DID") + disciplina.getString("name") +
-                    System.getProperty("line.separator") + " Turma: " + turma.getString("codigoTurma")+
-                    System.getProperty("line.separator") + turma.getString("horarioAulas"));
-        }
-        */
-    }
+    public FragmentoSelecionarTurma() {}
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         // Use the Builder class for convenient dialog construction
 
-        ArrayAdapter ad = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1 ,listaItemTurmas);
+        ArrayList listaIdsTurmas = getArguments().getStringArrayList("turmas_ids");
 
-        ParseQueryAdapter mAd = new ParseQueryAdapter(getActivity(),"Turma");
+        CustomAdapterListaTurmas ad = new CustomAdapterListaTurmas(getActivity().getApplicationContext(), listaIdsTurmas);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage("Selecione uma turma")
-                .setAdapter(mAd, new DialogInterface.OnClickListener() {
+                .setAdapter(ad, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -55,8 +44,13 @@ public class FragmentoSelecionarTurma extends DialogFragment {
                         //usuario.put("");
                     }
                 });
+                ad.loadObjects();
         // Create the AlertDialog object and return it
         return builder.create();
+    }
+
+    public void  setHorario(ParseObject horario) {
+        this.horario = horario;
     }
 }
 

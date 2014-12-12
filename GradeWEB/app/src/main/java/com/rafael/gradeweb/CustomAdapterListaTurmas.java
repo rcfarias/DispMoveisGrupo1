@@ -6,27 +6,27 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.parse.ParseImageView;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseQueryAdapter;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
-public class CustomAdapterListaDisciplinas extends ParseQueryAdapter {
-    private ParseObject horario;
+/**
+ * Created by Rafael Farias on 03/12/2014.
+ */
+public class CustomAdapterListaTurmas extends ParseQueryAdapter {
 
-    public CustomAdapterListaDisciplinas(Context context,  final ArrayList listaIDS) {
+    public CustomAdapterListaTurmas(Context context, final ArrayList listaDisciplas) {
 
-        super(context,new ParseQueryAdapter.QueryFactory<ParseObject>() {
+        super(context, new ParseQueryAdapter.QueryFactory<ParseObject>() {
             public ParseQuery create() {
                 ParseQuery query = new ParseQuery("Turma");
-                query.whereContainedIn("objectId", listaIDS);
+                query.whereNotContainedIn("objectId", listaDisciplas);
                 query.include("disciplina");
-                query.orderByAscending("DID");
+                //query.orderByDescending("disciplina.DID");
+                //query.addAscendingOrder("codigoTurma");
                 return query;
             }
         });
@@ -40,8 +40,6 @@ public class CustomAdapterListaDisciplinas extends ParseQueryAdapter {
         }
 
         super.getItemView(object, v, parent);
-
-        //ParseObject disciplina = object.getParseObject("disciplina");
 
         // Add the title view
         TextView didTextView = (TextView) v.findViewById(R.id.campo_did);
@@ -61,6 +59,7 @@ public class CustomAdapterListaDisciplinas extends ParseQueryAdapter {
         TextView professorTextView = (TextView) v.findViewById(R.id.campo_professor);
         professorTextView.setText(object.getString("professor"));
 
+        Log.d("preenchendo listView", object.getParseObject("disciplina").getString("DID"));
 
         // Add a reminder of how long this item has been outstanding
         //TextView timestampView = (TextView) v.findViewById(R.id.timestamp);

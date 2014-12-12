@@ -21,8 +21,8 @@ public class CustomListAdapter extends ParseQueryAdapter {
         // Todos marked as high-pri
         super(context, new ParseQueryAdapter.QueryFactory<ParseObject>() {
             public ParseQuery create() {
-                ParseQuery query = new ParseQuery("Todo");
-                query.whereEqualTo("highPri", true);
+                ParseQuery query = new ParseQuery("Horario");
+                query.whereEqualTo("usuario", GradeWEBApplication.getInstance().getUsuario());
                 return query;
             }
         });
@@ -30,14 +30,10 @@ public class CustomListAdapter extends ParseQueryAdapter {
 
     public CustomListAdapter(Context context, final String className, final String attribute1) {
         super(context, new ParseQueryAdapter.QueryFactory<ParseObject>() {
-            final String classe = className;
-            final String at1 = attribute1;
-
-            GradeWEBApplication m = GradeWEBApplication.getInstance();
-
             public ParseQuery create() {
                 ParseQuery query = new ParseQuery("Horario");
-                query.whereEqualTo("usuario", m.getUsuario());
+                query.whereEqualTo("usuario", GradeWEBApplication.getInstance().getUsuario());
+                query.include("turmas");
                 query.orderByAscending("semestre");
                 return query;
             }
@@ -54,16 +50,6 @@ public class CustomListAdapter extends ParseQueryAdapter {
 
         super.getItemView(object, v, parent);
 
-
-/*
-        // Add and download the image
-        ParseImageView todoImage = (ParseImageView) v.findViewById(R.id.icon);
-        ParseFile imageFile = object.getParseFile("image");
-        if (imageFile != null) {
-            todoImage.setParseFile(imageFile);
-            todoImage.loadInBackground();
-        }
-*/
         // Add the title view
         TextView titleTextView = (TextView) v.findViewById(R.id.text1);
         titleTextView.setText(object.getString("semestre"));

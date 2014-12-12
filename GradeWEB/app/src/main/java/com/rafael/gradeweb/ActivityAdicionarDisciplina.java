@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,108 +23,65 @@ import java.util.List;
  */
 public class ActivityAdicionarDisciplina extends Activity{
 
-    private ListView turmasListView;
-    private Button okButton;
-    private GradeWEBApplication myApplication;
-    private String objectID;
-
-
-    private ParseObject turmaSelecionada;
-    private ParseObject horarioObject;
-    private List<ParseObject> listaDisciplinasNaoMatriculado;
-
-    private ParseObject getHorarioObject() {
-        return horarioObject;
-    }
+    private ArrayList listaIdsTurmas;
+    private String semestre;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        listaIdsTurmas = new ArrayList();
+
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            objectID = (String) extras.getString("EXTRA_OBJECT_ID");
-            Toast.makeText(this, "objectId = " + (String) objectID, 5000).show();
+            String objectID = (String) extras.getString("EXTRA_OBJECT_ID");
+
+            listaIdsTurmas = extras.getStringArrayList("turmas_ids");
+            semestre = extras.getString("semestre");
+            Toast.makeText(this, "semestre = " + semestre, 5000).show();
         }
         else
             Toast.makeText(this, "extras eh NULL", 5000).show();
 
-        myApplication = GradeWEBApplication.getInstance();
+        setContentView(R.layout.layout_activity_adicionar_turma);
 
-        setContentView(R.layout.layout_activity_selecionar_discplina);
-        turmasListView = (ListView) findViewById(R.id.selecionar_turma_list_view);
-        okButton = (Button) findViewById(R.id.ok_button);
+        ListView turmasListView = (ListView) findViewById(R.id.turmas_list_view);
 
-        ParseQuery<ParseObject> turmasQuery = ParseQuery.getQuery("Horario");
-        turmasQuery.include("turmas");
-        //turmasQuery.fromLocalDatastore();
+        CustomAdapterListaTurmas mAd = new CustomAdapterListaTurmas(this, listaIdsTurmas);
 
-        horarioObject = null;
-        try {
-            horarioObject = turmasQuery.get(objectID);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        turmasListView.setAdapter(mAd);
+        mAd.loadObjects();
 
-        List<ParseObject> listaTurmas = horarioObject.getList("turmas");
-
-        ParseQuery<ParseObject> queryTurmas = ParseQuery.getQuery("Turma");
-        queryTurmas.whereExists("semestre");
-        queryTurmas.whereNotContainedIn("objectId", listaTurmas);
-        //queryTurmas.fromLocalDatastore();
-        queryTurmas.include("disciplina");
-
-        listaDisciplinasNaoMatriculado = null;
-
-        try {
-            listaDisciplinasNaoMatriculado = queryTurmas.find();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        String fimDeLinha = System.getProperty("line.separator");
-        final ArrayList listaNomesDisciplinasNaoMatriculado = new ArrayList();
-        for(ParseObject turma: listaDisciplinasNaoMatriculado) {
-            ParseObject disciplina = turma.getParseObject("disciplina");
-            listaNomesDisciplinasNaoMatriculado.add(disciplina.getString("DID") + " " + disciplina.getString("name"));// + fimDeLinha +
-                   // turma.getString("codigoTurma") + "/ Professor" + turma.getString("professor") );
-        }
-
-        ArrayAdapter<ArrayList> meuAdapter = new ArrayAdapter<ArrayList>(this, android.R.layout.simple_expandable_list_item_1, listaNomesDisciplinasNaoMatriculado);
-
-        turmasListView.setAdapter(meuAdapter);
-
-        turmasListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        turmasListView.setOnItemClickListener( new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                ParseObject disciplina = listaDisciplinasNaoMatriculado.get(i).getParseObject("disciplina");
-                String teste = disciplina.getString("DID");
-                Toast.makeText(adapterView.getContext(), "teste = " + teste, 5000).show();
+            public void onItemClick(AdapterView<?> adapter, View view, int position, long id) {
+                ParseObject turma = (ParseObject) adapter.getItemAtPosition(position);
 
-                turmaSelecionada = (ParseObject) listaDisciplinasNaoMatriculado.get(i);
-            }
-        });
+                Log.d("turma -> " , turma.getParseObject("disciplina").getString("DID"));
 
-        okButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                List<ParseObject> listaTurmas= getHorarioObject().getList("turmas");
+                ParseUser u = GradeWEBApplication.getInstance().getUsuario();
 
-                listaTurmas.add(turmaSelecionada);
+                ParseQuery<ParseObject> query = ParseQuery.getQuery("Horario");
+                query.whereEqualTo("usuario", u);
+                query.whereEqualTo("semestre", semestre);
 
-                horarioObject.put("turmas", listaTurmas);
+                List<ParseObject> horario = new ArrayList<ParseObject>();
                 try {
-                    horarioObject.save();
+                    horario = query.find();
+                    Log.d("Horario ID = " + semestre, "aqui" + horario.get(0).getObjectId());
+
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
 
+                List<ParseObject> listaTurmas = horario.get(0).getList("turmas");
+                listaTurmas.add(turma);
+                horario.get(0).put("turmas", listaTurmas);
+                horario.get(0).saveInBackground();
 
                 finish();
             }
         });
-
-        //turmasListView.setEnabled(false);
 
     }
 
