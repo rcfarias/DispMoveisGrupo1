@@ -43,6 +43,7 @@ public class LoginActivity extends Activity {
     private static final int LOGIN_REQUEST = 0;
     private final String TAG = "TKT";
     private final String disciplinaLabel = "Disciplina";
+    private final String horarioLabel = "Horario";
 
     private TextView titleTextView;
     private TextView emailTextView;
@@ -67,7 +68,7 @@ public class LoginActivity extends Activity {
         loginOrLogoutButton = (Button) findViewById(R.id.login_or_logout_button);
         titleTextView.setText(R.string.profile_title_logged_in);
 
-        // Query for the latest objects from Parse.
+        // Query for the Disciplina objects from Parse.
         ParseQuery<ParseObject> query = ParseQuery.getQuery(disciplinaLabel);
         query.findInBackground(new FindCallback<ParseObject>() {
             public void done(final List<ParseObject> listaDisciplinas, ParseException e) {
@@ -184,6 +185,32 @@ public class LoginActivity extends Activity {
             nameTextView.setText(fullName);
         }
         loginOrLogoutButton.setText(R.string.profile_logout_button_label);
+
+        // Query for the Horario objects from Parse.
+        ParseQuery<ParseObject> horariosUsuarioQuery = ParseQuery.getQuery(horarioLabel);
+        horariosUsuarioQuery.whereEqualTo("usuario", myApplication.getUsuario());
+        horariosUsuarioQuery.include("turmas");
+        horariosUsuarioQuery.findInBackground(new FindCallback<ParseObject>() {
+            public void done(final List<ParseObject> listaHorariosUsuario, ParseException e) {
+                if (e != null) {
+                    // There was an error or the network wasn't available.
+                    return;
+                }
+
+                // Release any objects previously pinned for this query.
+                ParseObject.unpinAllInBackground(horarioLabel, listaHorariosUsuario, new DeleteCallback() {
+                    public void done(ParseException e) {
+                        if (e != null) {
+                            // There was some error.
+                            return;
+                        }
+
+                        // Add the latest results for this query to the cache.
+                        ParseObject.pinAllInBackground(horarioLabel, listaHorariosUsuario);
+                    }
+                });
+            }
+        });
 
         Intent intent = new Intent(this, MainActivityDrawer.class);
         startActivity(intent);

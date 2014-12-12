@@ -4,16 +4,37 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background">
+    android:background="@color/background"
+    android:padding="20dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/consultaTextView"
+        android:text="Selecione uma disiplinar para mais detalhes: "
+        android:textSize="20.5sp"
+        android:gravity="center"/>
 
 
     <ListView
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="200dp"
         android:id="@+id/listViewDisciplinas"
-        android:layout_gravity="center">
+        android:layout_gravity="center"
+        android:paddingBottom="20dp"
+        android:paddingTop="20dp">
 
         </ListView>
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/ementaTextView"
+        android:text="Ementa: "
+        android:textSize="20.5sp"
+        android:gravity="center"/>
+
 
     <ScrollView
         android:layout_width="match_parent"
@@ -24,7 +45,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="New Text"
-            android:id="@+id/detalhesTextView" />
+            android:id="@+id/detalhesTextView"
+
+            android:textSize="22.5sp"/>
     </ScrollView>
 </LinearLayout>

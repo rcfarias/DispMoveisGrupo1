@@ -64,6 +64,10 @@ public class MainActivityDrawer extends Activity {
         myApplication.updateUsuario();
         currentUser = myApplication.getUsuario();
 
+
+        // initial query for the user schedule
+
+
         // Initializing
         dataList = new ArrayList<DrawerItem>();
         mTitle = mDrawerTitle = getTitle();
@@ -73,14 +77,10 @@ public class MainActivityDrawer extends Activity {
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow,GravityCompat.START);
 
         // Add Drawer Item to dataList
-        dataList.add(new DrawerItem("Semestres", R.drawable.ic_action_account));
         dataList.add(new DrawerItem("User", R.drawable.ic_action_user));
-        dataList.add(new DrawerItem("Cloud", R.drawable.ic_action_cloud));
-        dataList.add(new DrawerItem("Camara", R.drawable.ic_action_camera));
-        dataList.add(new DrawerItem("Video", R.drawable.ic_action_video));
-        dataList.add(new DrawerItem("Groups", R.drawable.ic_action_group));
-        dataList.add(new DrawerItem("Import & Export",
-                R.drawable.ic_action_import_export));
+        dataList.add(new DrawerItem("Semestres", R.drawable.ic_action_account));
+        dataList.add(new DrawerItem("Consulta Dsicplina", R.drawable.ic_action_video));
+        //dataList.add(new DrawerItem("Import & Export", R.drawable.ic_action_import_export));
         dataList.add(new DrawerItem("About", R.drawable.ic_action_about));
         dataList.add(new DrawerItem("Settings", R.drawable.ic_action_settings));
         dataList.add(new DrawerItem("Help", R.drawable.ic_action_help));
@@ -115,7 +115,7 @@ public class MainActivityDrawer extends Activity {
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
         if (savedInstanceState == null) {
-            SelectItem(1);
+            SelectItem(0);
         }
 
     }
@@ -126,79 +126,36 @@ public class MainActivityDrawer extends Activity {
         Bundle args = new Bundle();
         switch (possition) {
             case 0:
-                fragment = new PlaceholderFragment();
-                break;
-            case 1:
                 fragment = new FragmentProfile();
-
                 args.putString("USER_NAME", currentUser.getString("name"));
                 args.putString("EMAIL", currentUser.getEmail());
                 break;
+            case 1:
+                fragment = new PlaceholderFragment();
+                break;
             case 2:
-                fragment = new FragmentOne();
-                args.putString(FragmentOne.ITEM_NAME, dataList.get(possition)
-                        .getItemName());
-                args.putInt(FragmentOne.IMAGE_RESOURCE_ID, dataList.get(possition)
-                        .getImgResID());
+                fragment = new FragmentoDetalhesDisciplina();
                 break;
             case 3:
-                fragment = new FragmentSemesterList();
-                //args.putString(FragmentOne.ITEM_NAME, dataList.get(possition)
-                //        .getItemName());
-                //args.putInt(FragmentOne.IMAGE_RESOURCE_ID, dataList.get(possition)
-                //        .getImgResID());
+                fragment = new FragmentOne();
+                args.putString(FragmentOne.ITEM_NAME, dataList.get(possition).getItemName());
+                args.putInt(FragmentOne.IMAGE_RESOURCE_ID, dataList.get(possition).getImgResID());
                 break;
             case 4:
-                //fragment = new FragmentOne();
-                //args.putString(FragmentOne.ITEM_NAME, dataList.get(possition)
-                //        .getItemName());
-                //args.putInt(FragmentOne.IMAGE_RESOURCE_ID, dataList.get(possition)
-                //       .getImgResID());
-
-                fragment = new FragmentoDetalhesDisciplina();
-
+                fragment = new FragmentOne();
+                args.putString(FragmentOne.ITEM_NAME, dataList.get(possition).getItemName());
+                args.putInt(FragmentOne.IMAGE_RESOURCE_ID, dataList.get(possition).getImgResID());
                 break;
             case 5:
                 fragment = new FragmentOne();
-                args.putString(FragmentOne.ITEM_NAME, dataList.get(possition)
-                        .getItemName());
-                args.putInt(FragmentOne.IMAGE_RESOURCE_ID, dataList.get(possition)
-                        .getImgResID());
+                args.putString(FragmentOne.ITEM_NAME, dataList.get(possition).getItemName());
+                args.putInt(FragmentOne.IMAGE_RESOURCE_ID, dataList.get(possition).getImgResID());
                 break;
             case 6:
                 fragment = new FragmentOne();
-                args.putString(FragmentOne.ITEM_NAME, dataList.get(possition)
-                        .getItemName());
-                args.putInt(FragmentOne.IMAGE_RESOURCE_ID, dataList.get(possition)
-                        .getImgResID());
+                args.putString(FragmentOne.ITEM_NAME, dataList.get(possition).getItemName());
+                args.putInt(FragmentOne.IMAGE_RESOURCE_ID, dataList.get(possition).getImgResID());
                 break;
-            case 7:
-                fragment = new FragmentOne();
-                args.putString(FragmentOne.ITEM_NAME, dataList.get(possition)
-                        .getItemName());
-                args.putInt(FragmentOne.IMAGE_RESOURCE_ID, dataList.get(possition)
-                        .getImgResID());
-                break;
-            case 8:
-                fragment = new FragmentOne();
-                args.putString(FragmentOne.ITEM_NAME, dataList.get(possition)
-                        .getItemName());
-                args.putInt(FragmentOne.IMAGE_RESOURCE_ID, dataList.get(possition)
-                        .getImgResID());
-                break;
-            case 9:
-                fragment = new FragmentOne();
-                args.putString(FragmentOne.ITEM_NAME, dataList.get(possition)
-                        .getItemName());
-                break;
-            case 10:
-                fragment = new FragmentOne();
-                args.putString(FragmentOne.ITEM_NAME, dataList.get(possition)
-                        .getItemName());
-                args.putInt(FragmentOne.IMAGE_RESOURCE_ID, dataList.get(possition)
-                        .getImgResID());
-                break;
-
             default:
                 break;
         }
@@ -251,12 +208,12 @@ public class MainActivityDrawer extends Activity {
         public void onItemClick(AdapterView<?> parent, View view, int position,
                                 long id) {
 
-            if(position != 10){
-                Log.d(TAG, "position != 10 @OnItemClickListener");
+            if(position != 6){
+                Log.d(TAG, "position != 6 @OnItemClickListener");
                 SelectItem(position);
             }
             else {
-                Log.d(TAG, "position == 10 @OnItemClickListener");
+                Log.d(TAG, "position == 6 @OnItemClickListener");
                 if(currentUser != null) {
                     Log.d(TAG, "currentUser != null @OnItemClickListener");
                     //ParseUser.logOut();
@@ -297,9 +254,10 @@ public class MainActivityDrawer extends Activity {
 
 
             ParseQuery<ParseObject> horarioQuery = ParseQuery.getQuery("Horario");
-            horarioQuery.whereEqualTo("usuario", myApp.getUsuario());
-            horarioQuery.selectKeys(Arrays.asList("semestre","objectId"));
-            horarioQuery.addAscendingOrder("semestre");
+            //horarioQuery.whereEqualTo("usuario", myApp.getUsuario());
+            horarioQuery.selectKeys(Arrays.asList("semestre"));
+            horarioQuery.orderByAscending("semestre");
+            horarioQuery.fromLocalDatastore();
 
             List<ParseObject> horarioObjects = null;
             try {
@@ -331,19 +289,12 @@ public class MainActivityDrawer extends Activity {
             ArrayAdapter<List> semestreAdapter = new ArrayAdapter<List>(this.getActivity(),
                                                                                  android.R.layout.simple_expandable_list_item_1,
                                                                                  semestreList);
-
             myListView.setAdapter(semestreAdapter);
-
 
             myListView.setOnItemClickListener( new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Toast.makeText(MainActivityDrawer.this, "You clicked" + (String) semestreList.get(position), 5000).show();
-
-                    //FragmentManager frgManager;
-                    //Fragment fragment;
-
-                   // fragment = new PlaceholderFragment();
 
                     fragment = new FragmentSemesterList();
                     Bundle args = new Bundle();
