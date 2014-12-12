@@ -2,10 +2,11 @@ package com.rafael.gradeweb;
 
 //import com.rafael.gradeweb.GradeWEBApplication;
 
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.lang.String;
-
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.Fragment;
@@ -16,18 +17,18 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.parse.FindCallback;
 import com.parse.Parse;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 public class MainActivityDrawer extends Activity {
@@ -48,6 +49,9 @@ public class MainActivityDrawer extends Activity {
 
     private ParseUser currentUser;
     private  GradeWEBApplication myApplication;
+
+    private List<ParseObject> disciplinas;
+    private List<ParseObject> horarios;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,27 +127,6 @@ public class MainActivityDrawer extends Activity {
         switch (possition) {
             case 0:
                 fragment = new PlaceholderFragment();
-                /*
-                fragment = new FragmentSemesterList();
-
-                ArrayList<String> semestres = new ArrayList<String>();
-                semestres.add("2009-1");
-                semestres.add("2009-2");
-                semestres.add("2010-1");
-                semestres.add("2010-2");
-                semestres.add("2011-1");
-                semestres.add("2011-2");
-                semestres.add("2012-1");
-                semestres.add("2012-2");
-                semestres.add("2013-1");
-                semestres.add("2014-1");
-                semestres.add("2014-2");
-
-                args.putStringArrayList("LISTA_SEMESTRES", semestres);
-                args.putString("NAME", currentUser.getString("name"));
-                args.putString("EMAIL", currentUser.getEmail());
-
-                */
                 break;
             case 1:
                 fragment = new FragmentProfile();
@@ -296,6 +279,8 @@ public class MainActivityDrawer extends Activity {
 
         private String[] strListView;
 
+        private List semestreList;
+
         public PlaceholderFragment() {
 
         }
@@ -307,21 +292,50 @@ public class MainActivityDrawer extends Activity {
 
             myApp = GradeWEBApplication.getInstance();
 
-            View rootView = inflater.inflate(R.layout.semester_main_list_fragment, container, false);
 
+            ParseQuery<ParseObject> horarioQuery = ParseQuery.getQuery("Horario");
+            horarioQuery.whereEqualTo("usuario", myApp.getUsuario());
+            horarioQuery.selectKeys(Arrays.asList("semestre","objectId"));
+            horarioQuery.addAscendingOrder("semestre");
+
+            List<ParseObject> horarioObjects = null;
+            try {
+                horarioObjects = horarioQuery.find();
+            }
+            catch (com.parse.ParseException e) {
+                e.printStackTrace();
+            }
+
+            semestreList = new ArrayList();
+
+            int k;
+            for(k = 0; k < horarioObjects.size(); k++) {
+                ParseObject cada = horarioObjects.get(k);
+
+                semestreList.add((String) cada.get("semestre"));
+
+            }
+
+            View rootView = inflater.inflate(R.layout.semester_main_list_fragment, container, false);
 
             myListView = (ListView) rootView.findViewById(R.id.semestre_list_view);
 
-            strListView = getResources().getStringArray(R.array.data_listView);
+            //strListView = getResources().getStringArray(R.array.data_listView);
+            //ArrayAdapter<String> objAdapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_expandable_list_item_1, strListView);
+            //myListView.setAdapter(objAdapter);
 
-            ArrayAdapter<String> objAdapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_expandable_list_item_1, strListView);
 
-            myListView.setAdapter(objAdapter);
+            ArrayAdapter<List> semestreAdapter = new ArrayAdapter<List>(this.getActivity(),
+                                                                                 android.R.layout.simple_expandable_list_item_1,
+                                                                                 semestreList);
+
+            myListView.setAdapter(semestreAdapter);
+
 
             myListView.setOnItemClickListener( new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Toast.makeText(MainActivityDrawer.this, "You clicked" + strListView[position], 5000).show();
+                    Toast.makeText(MainActivityDrawer.this, "You clicked" + (String) semestreList.get(position), 5000).show();
 
                     //FragmentManager frgManager;
                     //Fragment fragment;
@@ -331,7 +345,7 @@ public class MainActivityDrawer extends Activity {
                     fragment = new FragmentSemesterList();
                     Bundle args = new Bundle();
 
-                    args.putString("SEMESTRE",strListView[position]);
+                    args.putString("SEMESTRE",(String) semestreList.get(position));
 
                     fragment.setArguments(args);
                     frgManager = getFragmentManager();

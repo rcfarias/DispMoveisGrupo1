@@ -20,6 +20,7 @@ import com.parse.ParseUser;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Created by Rafael on 11/23/2014.
@@ -33,7 +34,7 @@ public class FragmentSemesterList extends Fragment {
     private ArrayList nomeTodasDisciplinas;
     private ArrayList<String> codigoTodasDisciplinas;
 
-    private ListView essaListView;
+    private ListView semestresListView;
 
     public FragmentSemesterList(){
 
@@ -47,109 +48,85 @@ public class FragmentSemesterList extends Fragment {
         mApp = GradeWEBApplication.getInstance();
         //ParseUser usuario = mApp.getUsuario();
 
-
         View viewRaiz = inflater.inflate(R.layout.semester_main_list_fragment, container, false);
 
-
-        essaListView = (ListView) viewRaiz.findViewById(R.id.semestre_list_view);
-
-
-        // uncomment to get it Working again
-        //discStrList = getResources().getStringArray(R.array.disc_listView);
-        //ArrayAdapter<String> meuAdapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_expandable_list_item_1, discStrList);
-        //essaListView.setAdapter(meuAdapter);
+        semestresListView = (ListView) viewRaiz.findViewById(R.id.semestre_list_view);
 
 
-        nomeTodasDisciplinas = new ArrayList();
-        codigoTodasDisciplinas = new ArrayList<String>();
+        ParseQuery<ParseObject> turmaQuery = ParseQuery.getQuery("Horario");
+        turmaQuery.whereEqualTo("usuario", mApp.getUsuario());
+        turmaQuery.whereEqualTo("semestre", getArguments().getString("SEMESTRE"));
+        turmaQuery.include("turmas");
+        turmaQuery.include("disciplina");
 
-
-        //populateListView();
-
-        //create list of items
-        //String[] myItems = { "2009-1", "2009-2", "2010-1", "2010-2", "2011-1", "2011-2",
-        //        "2012-2", "2013-1", "2013-2", "2014-1", "2014-2"};
-
-        // build adapter
-       // ArrayAdapter<String> myAdapter;
-       // myAdapter = new ArrayAdapter<String>(
-       //         getActivity(),
-       //         R.layout.semester_item,
-       //         myItems);
-
-        //configure the listView
-        //listView = (ListView) view.findViewById(R.id.semestre_list_view);
-        //listView.setAdapter(myAdapter);
-
-        //ArrayList<String> discplinas = new ArrayList<String>();
-
-        //discplinas.add("ENGG55");
-        //discplinas.add("ENGG54");
-        //discplinas.add("ENGG56");
-        //discplinas.add("MATA58");
-        //discplinas.add("ENGG01");
-
-
-
-
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("Disciplina");  //("Horario");
-
-        query.whereExists("DID");
-
-        query.selectKeys(Arrays.asList("DID", "name"));
-
-        //ArrayList<ParseObject> todasAsDiciplinas =
-
-        /*
-         query.findInBackground(new FindCallback<ParseObject>() {
-            @Override
-            public void done(List<ParseObject> parseObjects, ParseException e) {
-                if(e == null) {
-                    //success
-                    /*
-                    while(parseObjects.iterator().hasNext()){
-                        nomeTodasDisciplinas.add(parseObjects.get("name"));
-                        codigoTodasDisciplinas.add();
-                    }
-                    ///
-
-                    int j = 0;
-                    for(j = 0; j < parseObjects.size(); j++) {
-                        ParseObject cada = parseObjects.get(j);
-                        nomeTodasDisciplinas.add((String) cada.get("DID"));
-                        codigoTodasDisciplinas.add( (String) cada.get("name") );
-                    }
-
-
-                    ArrayAdapter<ArrayList> meuAdapter = new ArrayAdapter<ArrayList>(this.getActivity(), android.R.layout.simple_expandable_list_item_1, nomeTodasDisciplinas);
-
-                    essaListView.setAdapter(meuAdapter);
-
-                }
-                else {
-                    //failure
-                }
-            }
-        });*/
-
-        List<ParseObject> parseObjects = null;
+        List<ParseObject> disciplinaObjects = null;
         try {
-            parseObjects = query.find();
+            disciplinaObjects = turmaQuery.find();
         } catch (ParseException e) {
             e.printStackTrace();
+            Log.d("FragmentSemestre", "ERROR!! exception happened 1");
         }
 
-        int j = 0;
-        for(j = 0; j < parseObjects.size(); j++) {
-            ParseObject cada = parseObjects.get(j);
-            nomeTodasDisciplinas.add((String) cada.get("DID"));
-            codigoTodasDisciplinas.add( (String) cada.get("name") );
+        /*
+        ParseQuery<ParseObject> query1 = ParseQuery.getQuery("Turma");
+        ParseObject turma1 = null;
+        try {
+            turma1 = query1.get("142K4locPn");
+        } catch (ParseException e) {
+            e.printStackTrace();
+            Log.d("FragmentSemestre", "ERROR!! exception happened 2");
+        }
+
+        ParseQuery<ParseObject> query2 = ParseQuery.getQuery("Turma");
+        ParseObject turma2 = null;
+        try {
+            turma2 = query2.get("Um6iniFQ9M");
+        } catch (ParseException e) {
+            e.printStackTrace();
+            Log.d("FragmentSemestre", "ERROR!! exception happened 3");
+        }
+
+        ParseQuery<ParseObject> query3 = ParseQuery.getQuery("Turma");
+        ParseObject turma3 = null;
+        try {
+            turma3 = query3.get("2o4KREbhTQ");
+        } catch (ParseException e) {
+            e.printStackTrace();
+            Log.d("FragmentSemestre", "ERROR!! exception happened 4");
+        }
+
+        disciplinaObjects.get(0).put("turmas", Arrays.asList( turma1, turma2, turma3));
+        //disciplinaObjects.get(0).put("turmas", turma2);
+        //disciplinaObjects.get(0).put("turmas", turma3);
+        disciplinaObjects.get(0).saveInBackground();
+        */
+
+        List<ParseObject> listaDeTurmas = disciplinaObjects.get(0).getList("turmas");
+
+        //ParseQuery<ParseObject> queryListaTurmaDisciplina = ParseQuery.getQuery("Turma");
+
+        //queryListaTurmaDisciplina.include("disciplina");
+
+
+        ArrayList listaIds = new ArrayList();
+        for(int l = 0; l < listaDeTurmas.size(); l ++) {
+            listaIds.add(listaDeTurmas.get(l).getObjectId());
         }
 
 
-        ArrayAdapter<ArrayList> meuAdapter = new ArrayAdapter<ArrayList>(this.getActivity(), android.R.layout.simple_expandable_list_item_1, nomeTodasDisciplinas);
+        ArrayList listaDisciplinas = new ArrayList();
 
-        essaListView.setAdapter(meuAdapter);
+        for(int j = 0; j < listaDeTurmas.size(); j++) {
+            ParseObject cada = listaDeTurmas.get(j);
+            listaDisciplinas.add(cada.getString("DID") + " - " + cada.getString("name") + " Turma" +cada.getString("codigoTurma")+ "/" + cada.getString("professor"));
+        }
+
+
+        ArrayAdapter<ArrayList> meuAdapter = new ArrayAdapter<ArrayList>(this.getActivity(),
+                                                                         android.R.layout.simple_expandable_list_item_1,
+                                                                         listaDisciplinas);
+
+        semestresListView.setAdapter(meuAdapter);
 
 
 
@@ -187,10 +164,26 @@ public class FragmentSemesterList extends Fragment {
         });
         */
 
+        /*
+        ParseQuery<ParseObject> tquery = ParseQuery.getQuery("Turma");
 
+        tquery.whereEqualTo("semestre", "2014-2");
 
+        ParseObject turma = null;
+        try {
+            turma = tquery.getFirst();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
+        ParseObject horario = new ParseObject("Horario");
 
+        horario.put("usuario", (ParseUser) mApp.getUsuario());
+        horario.put("semestre", "2014-2");
+        horario.put("turmas", Arrays.asList(turma));
+
+        horario.saveInBackground();
+        */
         //ParseObject semestre = new ParseObject("Horario");
         //semestre.put("semestre", getArguments().getString("SEMESTRE"));
         //semestre.put("usuario", "Teste");
