@@ -3,7 +3,7 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    android:background="#e0e0e0">
+    android:background="@color/background">
 
     <TextView
         android:id="@+id/login_help_instructions"
@@ -12,7 +12,7 @@
         style="@style/ParseLoginUI.TextView"
         android:gravity="center"
         android:text="@string/com_parse_ui_login_help_instructions"
-        android:textColor="#444444"/>
+        android:textColor="@color/text_color"/>
 
     <EditText
         android:id="@+id/login_help_email_input"
@@ -21,7 +21,7 @@
         android:layout_marginTop="@dimen/com_parse_ui_xlarge_vertical_spacing"
         android:hint="@string/com_parse_ui_login_help_email_input_hint"
         android:inputType="textEmailAddress"
-        android:textColor="#444444"
+        android:textColor="@color/text_color"
         android:textCursorDrawable="@null"></EditText>
 
     <Button

@@ -7,7 +7,7 @@
     android:paddingBottom="@dimen/com_parse_ui_vertical_margin"
     android:gravity="center"
     android:orientation="vertical"
-    android:background="#e0e0e0">
+    android:background="@color/background">
 
     <include
         layout="@layout/com_gradeweb_login_app_logo"
@@ -27,21 +27,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/ParseLoginUI.TextView"
-            android:textColor="#444444"
+            android:textColor="@color/text_color"
             android:text="@string/profile_title_logged_in" />
 
         <TextView
             android:id="@+id/profile_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#444444"
+            android:textColor="@color/text_color"
             style="@style/ParseLoginUI.TextView" />
 
         <TextView
             android:id="@+id/profile_email"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#444444"
+            android:textColor="@color/text_color"
             style="@style/ParseLoginUI.TextView" />
 
         <Button

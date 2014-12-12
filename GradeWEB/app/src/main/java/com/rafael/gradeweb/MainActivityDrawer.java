@@ -15,10 +15,13 @@ import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -118,6 +121,8 @@ public class MainActivityDrawer extends Activity {
         Bundle args = new Bundle();
         switch (possition) {
             case 0:
+                fragment = new PlaceholderFragment();
+                /*
                 fragment = new FragmentSemesterList();
 
                 ArrayList<String> semestres = new ArrayList<String>();
@@ -136,6 +141,8 @@ public class MainActivityDrawer extends Activity {
                 args.putStringArrayList("LISTA_SEMESTRES", semestres);
                 args.putString("NAME", currentUser.getString("name"));
                 args.putString("EMAIL", currentUser.getEmail());
+
+                */
                 break;
             case 1:
                 fragment = new FragmentProfile();
@@ -280,4 +287,35 @@ public class MainActivityDrawer extends Activity {
         }
     }
 
-}
+    public static class PlaceholderFragment extends Fragment {
+
+        private ListView myListView;
+
+        private String[] strListView;
+
+        public PlaceholderFragment() {
+
+        }
+
+        @Override
+        public View onCreateView( LayoutInflater inflater,
+                                  ViewGroup container,
+                                  Bundle savedInstanceState) {
+
+            View rootView = inflater.inflate(R.layout.semester_main_list_fragment, container, false);
+
+
+            myListView = (ListView) rootView.findViewById(R.id.semestre_list_view);
+
+            strListView = getResources().getStringArray(R.array.data_listView);
+
+            ArrayAdapter<String> objAdapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_list_item_1, strListView);
+
+            myListView.setAdapter(objAdapter);
+
+            return rootView;
+        } // end of onCreateView
+
+    } // end of PlaceholderFragment
+
+} //end of MainActivityDrawer

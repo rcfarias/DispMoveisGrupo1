@@ -3,7 +3,7 @@
     android:layout_height="wrap_content"
     android:gravity="center"
     android:orientation="vertical"
-    android:background="#e0e0e0">
+    android:background="@color/background">
 
     <EditText
         android:id="@+id/signup_username_input"
@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         style="@style/ParseLoginUI.EditText"
         android:hint="@string/com_parse_ui_username_input_hint"
-        android:textColor="#444444"
+        android:textColor="@color/text_color"
         android:textCursorDrawable="@null"/>
 
     <EditText
@@ -24,7 +24,7 @@
         android:hint="@string/com_parse_ui_password_input_hint"
         android:inputType="textPassword"
         android:selectAllOnFocus="true"
-        android:textColor="#444444"
+        android:textColor="@color/text_color"
         android:textCursorDrawable="@null"/>
 
     <EditText
@@ -37,7 +37,7 @@
         android:hint="@string/com_parse_ui_confirm_password_input_hint"
         android:inputType="textPassword"
         android:selectAllOnFocus="true"
-        android:textColor="#444444"
+        android:textColor="@color/text_color"
         android:textCursorDrawable="@null"/>
 
     <EditText
@@ -48,7 +48,7 @@
         android:layout_marginTop="@dimen/com_parse_ui_small_vertical_spacing"
         android:hint="@string/com_parse_ui_email_input_hint"
         android:inputType="textEmailAddress"
-        android:textColor="#444444"
+        android:textColor="@color/text_color"
         android:textCursorDrawable="@null"/>
 
     <EditText
@@ -59,7 +59,7 @@
         android:layout_marginTop="@dimen/com_parse_ui_small_vertical_spacing"
         android:hint="@string/com_parse_ui_name_input_hint"
         android:inputType="textPersonName"
-        android:textColor="#444444"
+        android:textColor="@color/text_color"
         android:textCursorDrawable="@null"/>
 
     <Button

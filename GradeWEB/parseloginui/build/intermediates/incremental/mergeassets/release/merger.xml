@@ -2,10 +2,10 @@
 <merger version="2" >
 
     <dataSet config="main" >
-        <source path="C:\Users\Rafael\Desktop\NewVersion\GradeWEB\ParseLoginUI\src\main\assets" />
+        <source path="C:\Users\Rafael Farias\Desktop\ANDROID v 1 0\GradeWEB\ParseLoginUI\src\main\assets" />
     </dataSet>
     <dataSet config="release" >
-        <source path="C:\Users\Rafael\Desktop\NewVersion\GradeWEB\ParseLoginUI\src\release\assets" />
+        <source path="C:\Users\Rafael Farias\Desktop\ANDROID v 1 0\GradeWEB\ParseLoginUI\src\release\assets" />
     </dataSet>
 
 </merger>
