@@ -60,8 +60,6 @@ public class FragmentoListaDisciplinasSemestreSelecionado extends Fragment{
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         context = activity.getApplicationContext();
-
-
     }
 
     @Override

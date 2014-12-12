@@ -75,11 +75,6 @@ public class CustomAdapterListaDisciplinas extends ParseQueryAdapter {
         TextView professorTextView = (TextView) v.findViewById(R.id.campo_professor);
         professorTextView.setText(object.getString("professor"));
 
-
-        // Add a reminder of how long this item has been outstanding
-        //TextView timestampView = (TextView) v.findViewById(R.id.timestamp);
-        //timestampView.setText(object.getUpdatedAt().toString());
-
         return v;
     }
 

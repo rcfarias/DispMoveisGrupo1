@@ -11,7 +11,22 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:id="@+id/titulo_adiciona_turma"
+        android:id="@+id/titulo_seleciona_disciplina"
+        android:textSize="20sp"
+        android:textColor="@color/text_color"
+        android:text="Selecione a disciplina:"
+        android:gravity="center"/>
+
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:id="@+id/diciplina_spinner">
+        </Spinner>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:id="@+id/titulo_seleciona_turma"
         android:textSize="20sp"
         android:textColor="@color/text_color"
         android:text="Selecione a turma a ser adiconada:"
@@ -26,7 +41,7 @@
 
     <ListView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="250dp"
         android:id="@+id/turmas_list_view">
 
         </ListView>

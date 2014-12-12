@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/transparent"
+    android:orientation="vertical"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="33dp"
+        android:orientation="horizontal"
+        android:layout_gravity="center">
+
+        <TextView
+            android:layout_width="80dp"
+            android:layout_height="33dp"
+            android:maxWidth="80dp"
+            android:id="@+id/campo_titulo_nome_turma"
+            android:textSize="14sp"
+            android:textColor="@color/text_color"
+            android:text="Turma"
+            android:gravity="center_vertical"
+            android:layout_gravity="left"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="33dp"
+            android:maxWidth="305dp"
+            android:maxHeight="33dp"
+            android:id="@+id/campo_titulo_nome_professor"
+            android:textSize="14sp"
+            android:textColor="@color/text_color"
+            android:text="Professor"
+            android:gravity="center"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:orientation="horizontal"
+        android:layout_gravity="center">
+
+        <TextView
+            android:layout_width="80dp"
+            android:layout_height="30dp"
+            android:maxWidth="80dp"
+            android:id="@+id/campo_codigo_turma"
+            android:textSize="14sp"
+            android:textColor="@color/text_color"
+            android:text="000000"
+            android:gravity="center_vertical"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:maxWidth="305dp"
+            android:id="@+id/campo_professor"
+            android:textSize="14sp"
+            android:textColor="@color/text_color"
+            android:text="Nome do Professor Aqui"
+            android:gravity="center"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center">
+
+        <TextView
+            android:layout_width="80dp"
+            android:layout_height="30dp"
+            android:maxWidth="80dp"
+            android:id="@+id/campo_titulo_horario"
+            android:textSize="14sp"
+            android:textColor="@color/text_color"
+            android:text="Horario:"
+            android:gravity="center_vertical"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/campo_dias_horario"
+            android:textSize="14sp"
+            android:textColor="@color/text_color"
+            android:text="ddd hh:mm-hh:mm \nddd hh:mm-hh:mm \nddd hh:mm-hh:mm"
+            android:gravity="center"/>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray">
+
+    </View>
+
+</LinearLayout>

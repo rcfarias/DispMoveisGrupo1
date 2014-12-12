@@ -8,11 +8,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseQueryAdapter;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
@@ -26,7 +28,10 @@ public class ActivityAdicionarDisciplina extends Activity{
     private ArrayList listaIdsTurmas;
     private String semestre;
     private ListView turmasListView;
+    private Spinner disciplinasSpinner;
     private CustomAdapterListaTurmas mAd;
+    private CustomSpinnerAdapterDisciplinas mSAd;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,14 +50,37 @@ public class ActivityAdicionarDisciplina extends Activity{
         //else
         //    Toast.makeText(this, "extras eh NULL", 5000).show();
 
+        final String sem = semestre;
+
         setContentView(R.layout.layout_activity_adicionar_turma);
 
         turmasListView = (ListView) findViewById(R.id.turmas_list_view);
 
-        mAd = new CustomAdapterListaTurmas(this, listaIdsTurmas);
+        disciplinasSpinner = (Spinner) findViewById(R.id.diciplina_spinner);
+        mSAd = new CustomSpinnerAdapterDisciplinas(this);
+        disciplinasSpinner.setAdapter(mSAd);
+        disciplinasSpinner.setSelection(0);
+        mSAd.setPaginationEnabled(false);
+        //mSAd.loadObjects();
 
-        turmasListView.setAdapter(mAd);
-        mAd.loadObjects();
+        disciplinasSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                ParseObject disc = (ParseObject) adapterView.getSelectedItem();
+                Log.d("Spinner", "Item selected = " + disc.getString("DID"));
+
+                mAd = new CustomAdapterListaTurmas(getApplicationContext(), disc, semestre);
+                turmasListView.setAdapter(mAd);
+                mAd.loadObjects();
+
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                Log.d("Spinner", "nada selecionado");
+            }
+        });
 
         turmasListView.setOnItemClickListener( new AdapterView.OnItemClickListener() {
             @Override
@@ -72,10 +100,30 @@ public class ActivityAdicionarDisciplina extends Activity{
                     horario = query.find();
                     Log.d("Horario ID = " + semestre, "aqui" + horario.get(0).getObjectId());
 
+                    List<ParseObject> listaTurmas = horario.get(0).getList("turmas");
+                    boolean jaAdicionada = false;
+
+                    for(ParseObject cada : listaTurmas) {
+                        if(cada.getObjectId() == turma.getObjectId())
+                            jaAdicionada = true;
+                    }
+
+                    if(jaAdicionada)
+                        Toast.makeText(getApplicationContext(), "Disciplina já cadastrada no horário", 5000).show();
+                    else {
+                        listaTurmas.add(turma);
+                        horario.get(0).put("turmas", listaTurmas);
+                        horario.get(0).saveInBackground();
+
+                        GradeWEBApplication.getInstance().setHorario(horario.get(0));
+                    }
+
+                    finish();
+
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-
+/*
                 List<ParseObject> listaTurmas = horario.get(0).getList("turmas");
                 listaTurmas.add(turma);
                 horario.get(0).put("turmas", listaTurmas);
@@ -84,6 +132,7 @@ public class ActivityAdicionarDisciplina extends Activity{
                 GradeWEBApplication.getInstance().setHorario(horario.get(0));
 
                 finish();
+*/
             }
         });
 
