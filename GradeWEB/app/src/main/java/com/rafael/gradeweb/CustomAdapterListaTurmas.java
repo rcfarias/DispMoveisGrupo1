@@ -59,7 +59,7 @@ public class CustomAdapterListaTurmas extends ParseQueryAdapter {
         TextView professorTextView = (TextView) v.findViewById(R.id.campo_professor);
         professorTextView.setText(object.getString("professor"));
 
-        Log.d("preenchendo listView", object.getParseObject("disciplina").getString("DID"));
+        //Log.d("preenchendo listView", object.getParseObject("disciplina").getString("DID"));
 
         // Add a reminder of how long this item has been outstanding
         //TextView timestampView = (TextView) v.findViewById(R.id.timestamp);

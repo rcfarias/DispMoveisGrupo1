@@ -31,7 +31,6 @@ public class FragmentoListaSemestresUsuario extends Fragment {
     private ListView listaSemestresListView;
 
     private Context context;
-
     private FragmentManager frgManager;
     private FragmentoListaDisciplinasSemestreSelecionado fragment;
 
@@ -64,6 +63,8 @@ public class FragmentoListaSemestresUsuario extends Fragment {
                 Bundle args = new Bundle();
 
                 ParseObject horario = (ParseObject) adapter.getItemAtPosition(position);
+
+                GradeWEBApplication.getInstance().setHorario(horario);
 
                 List<ParseObject> listaTurmas = horario.getList("turmas");
                 ArrayList listaIdsTurmas = new ArrayList();

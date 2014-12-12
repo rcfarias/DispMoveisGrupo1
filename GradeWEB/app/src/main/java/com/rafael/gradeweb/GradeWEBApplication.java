@@ -28,6 +28,8 @@ public class GradeWEBApplication extends Application {
 
     private ParseUser usuario;
 
+    private ParseObject horario;
+
     //private List<ParseObject> disciplinas;
     //private List<ParseObject> horarios;
 
@@ -74,4 +76,11 @@ public class GradeWEBApplication extends Application {
         updateUsuario();
     }
 
+    public ParseObject getHorario() {
+        return this.horario;
+    }
+
+    public void  setHorario(ParseObject horario) {
+        this.horario = horario;
+    }
 }

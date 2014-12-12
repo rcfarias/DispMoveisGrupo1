@@ -39,6 +39,10 @@ public class FragmentoListaDisciplinasSemestreSelecionado extends Fragment{
     private Button adicionarDisciplinaButton;
 
     private ParseObject horarioObject;
+    private ArrayList listaIdsTurmas;
+
+    private CustomAdapterListaDisciplinas mAdapter;
+    private ListView listaDisciplinas;
 
     public void setHorarioObject(ParseObject horario) {
         this.horarioObject = horario;
@@ -46,10 +50,18 @@ public class FragmentoListaDisciplinasSemestreSelecionado extends Fragment{
 
     public FragmentoListaDisciplinasSemestreSelecionado() {}
 
+    public void resetAdapter(ArrayList listaIdsTurmas) {
+        mAdapter = new CustomAdapterListaDisciplinas(context, listaIdsTurmas);
+        listaDisciplinas.setAdapter(mAdapter);
+        mAdapter.loadObjects();
+    }
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         context = activity.getApplicationContext();
+
+
     }
 
     @Override
@@ -57,16 +69,17 @@ public class FragmentoListaDisciplinasSemestreSelecionado extends Fragment{
 
         String semestre = (String) getArguments().getString("semestre");
 
-        ArrayList listaIdsTurmas = getArguments().getStringArrayList("turmas_ids");
+        listaIdsTurmas = getArguments().getStringArrayList("turmas_ids");
 
         View viewRaiz = inflater.inflate(R.layout.layout_fragmento_lista_disciplinas_semestre_selecionado, container, false);
 
-        ListView listaDisciplinas = (ListView) viewRaiz.findViewById(R.id.disciplinas_semestres_list_view);
+        listaDisciplinas = (ListView) viewRaiz.findViewById(R.id.disciplinas_semestres_list_view);
 
-        CustomAdapterListaDisciplinas mAdapter = new CustomAdapterListaDisciplinas(context, listaIdsTurmas);
+        //mAdapter = new CustomAdapterListaDisciplinas(context, listaIdsTurmas);
+        //listaDisciplinas.setAdapter(mAdapter);
+        //mAdapter.loadObjects();
 
-        listaDisciplinas.setAdapter(mAdapter);
-        mAdapter.loadObjects();
+        updateAdapter();
 
         /*
         listaDisciplinas.setOnItemClickListener( new AdapterView.OnItemClickListener() {
@@ -104,52 +117,43 @@ public class FragmentoListaDisciplinasSemestreSelecionado extends Fragment{
             @Override
             public void onClick(View view) {
 
-                //Fragment fragment = new FragmentoListaDisciplinasSemestreSelecionado();
-        //        Bundle args = new Bundle();
-
-                //ParseObject horario = (ParseObject) adapter.getItemAtPosition(position);
-
-                //List<ParseObject> listaTurmas = horario.getList("turmas");
-                //ArrayList listaIdsTurmas = new ArrayList();
-
-                //for(ParseObject cadaTurma : listaTurmas) {
-                //    listaIdsTurmas.add(cadaTurma.getObjectId());
-                //}
-
-                //Toast.makeText(getActivity(), "semestre selecionado: " + (String) horario.getString("semestre"), 5000).show();
-
-                //args.putString("semestre", horario.getString("semestre"));
-                //args.putStringArrayList("turmas_ids", listaIdsTurmas);
-
-                //fragment.setArguments(args);
-
-                //FragmentManager frgManager = getFragmentManager();
-                //frgManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
-
-        //        args.putStringArrayList("turmas_id", getArguments().getStringArrayList("turmas_ids"));
-
-        //        FragmentoSelecionarTurma f = new FragmentoSelecionarTurma();
-        //        f.setArguments(args);
-        //        f.show(getFragmentManager(), "meu dialog");
-
                 Intent intent = new Intent(getActivity().getApplicationContext(), ActivityAdicionarDisciplina.class);
                 //intent.putStringArrayListExtra("turmas_ids", getArguments().getStringArrayList("turmas_ids"));
 
                 Bundle args = new Bundle();
                 ArrayList l = getArguments().getStringArrayList("turmas_ids");
 
-                for(int i = 0; i < l.size() ; i++ ) {
-                    Toast.makeText(getActivity(), "turmaId: " + (String) l.get(i), 5000).show();
-                }
+                //for(int i = 0; i < l.size() ; i++ ) {
+                //    Toast.makeText(getActivity(), "turmaId: " + (String) l.get(i), 5000).show();
+                //}
 
                 args.putStringArrayList("turmas_ids", l);
                 args.putString("semestre", getArguments().getString("semestre"));
                 intent.putExtras(args);
                 startActivity(intent, args);
+
             }
         });
 
         return  viewRaiz;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateAdapter();
+    }
+
+    void updateAdapter() {
+        List<ParseObject> turmas = GradeWEBApplication.getInstance().getHorario().getList("turmas");
+
+        for(int j = 0; j < turmas.size(); j++) {
+            listaIdsTurmas.add(turmas.get(j).getObjectId());
+        }
+
+        mAdapter = new CustomAdapterListaDisciplinas(context, listaIdsTurmas);
+        listaDisciplinas.setAdapter(mAdapter);
+        mAdapter.loadObjects();
+
+    }
 }

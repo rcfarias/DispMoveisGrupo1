@@ -17,6 +17,13 @@
         android:text="Selecione a turma a ser adiconada:"
         android:gravity="center"/>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@android:color/darker_gray">
+
+    </View>
+
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"

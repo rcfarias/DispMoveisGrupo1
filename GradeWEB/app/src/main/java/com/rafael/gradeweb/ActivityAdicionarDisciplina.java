@@ -25,6 +25,8 @@ public class ActivityAdicionarDisciplina extends Activity{
 
     private ArrayList listaIdsTurmas;
     private String semestre;
+    private ListView turmasListView;
+    private CustomAdapterListaTurmas mAd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,14 +42,14 @@ public class ActivityAdicionarDisciplina extends Activity{
             semestre = extras.getString("semestre");
             Toast.makeText(this, "semestre = " + semestre, 5000).show();
         }
-        else
-            Toast.makeText(this, "extras eh NULL", 5000).show();
+        //else
+        //    Toast.makeText(this, "extras eh NULL", 5000).show();
 
         setContentView(R.layout.layout_activity_adicionar_turma);
 
-        ListView turmasListView = (ListView) findViewById(R.id.turmas_list_view);
+        turmasListView = (ListView) findViewById(R.id.turmas_list_view);
 
-        CustomAdapterListaTurmas mAd = new CustomAdapterListaTurmas(this, listaIdsTurmas);
+        mAd = new CustomAdapterListaTurmas(this, listaIdsTurmas);
 
         turmasListView.setAdapter(mAd);
         mAd.loadObjects();
@@ -79,6 +81,8 @@ public class ActivityAdicionarDisciplina extends Activity{
                 horario.get(0).put("turmas", listaTurmas);
                 horario.get(0).saveInBackground();
 
+                GradeWEBApplication.getInstance().setHorario(horario.get(0));
+
                 finish();
             }
         });
@@ -94,6 +98,7 @@ public class ActivityAdicionarDisciplina extends Activity{
     protected void onRestart(){
         super.onRestart();
         //Log.d(TAG, "onRestart()");
+
     }
 
     @Override

@@ -15,6 +15,7 @@ import com.parse.ParseQueryAdapter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class CustomAdapterListaDisciplinas extends ParseQueryAdapter {
     private ParseObject horario;
@@ -25,6 +26,19 @@ public class CustomAdapterListaDisciplinas extends ParseQueryAdapter {
             public ParseQuery create() {
                 ParseQuery query = new ParseQuery("Turma");
                 query.whereContainedIn("objectId", listaIDS);
+                query.include("disciplina");
+                query.orderByAscending("DID");
+                return query;
+            }
+        });
+    }
+
+    public CustomAdapterListaDisciplinas(Context context,  final List listaTurmas, ParseObject horario) {
+
+        super(context,new ParseQueryAdapter.QueryFactory<ParseObject>() {
+            public ParseQuery create() {
+                ParseQuery query = new ParseQuery("Turma");
+                query.whereContainedIn("objectId", listaTurmas);
                 query.include("disciplina");
                 query.orderByAscending("DID");
                 return query;
@@ -68,4 +82,6 @@ public class CustomAdapterListaDisciplinas extends ParseQueryAdapter {
 
         return v;
     }
+
+
 }
