@@ -18,10 +18,10 @@
         android:textColor="@color/text_color">
     </TextView>
 
-    <TextView
+    <ListView
         android:layout_width="match_parent"
         android:layout_height="371dp"
-        android:id="@+id/disciplinas_semestres_text_view"
+        android:id="@+id/disciplinas_semestres_list_view"
         android:textSize="20sp"/>
 
     <Button

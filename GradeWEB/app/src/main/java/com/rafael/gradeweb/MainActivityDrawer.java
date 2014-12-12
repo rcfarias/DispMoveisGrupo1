@@ -149,6 +149,7 @@ public class MainActivityDrawer extends Activity {
                 break;
         }
 
+
         fragment.setArguments(args);
         frgManager = getFragmentManager();
         frgManager.beginTransaction().replace(R.id.content_frame, fragment)

@@ -105,7 +105,7 @@ public class FragmentoDetalhesDisciplina extends Fragment {
                 final String fimDeLinha = System.getProperty("line.separator");
 
                 detalhesTextView.setText(nome + fimDeLinha + uni.getString("name") + fimDeLinha + fimDeLinha  + (String) obj.getString("description"));
-                detalhesTextView.setTextSize((float) 20.5);
+                //detalhesTextView.setTextSize((float) 20.5);
                 //detalhesTextView.setText((String) disciplinaDescription.get(0).getString("descriprion"));
 
 

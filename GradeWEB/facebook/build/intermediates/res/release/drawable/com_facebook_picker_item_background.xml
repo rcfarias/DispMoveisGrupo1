@@ -24,4 +24,4 @@
     <item android:state_focused="true"                                                             android:drawable="@drawable/com_facebook_picker_list_focused" />
     <item                                                                                          android:drawable="@android:color/transparent" />
 </selector>
-<!-- From: file:/C:/Users/Rafael%20Farias/Desktop/matc89%20v4.0/GradeWEB/facebook/res/drawable/com_facebook_picker_item_background.xml -->
+<!-- From: file:/C:/Users/Rafael/Desktop/New%20Version%204.0/GradeWEB/facebook/res/drawable/com_facebook_picker_item_background.xml -->

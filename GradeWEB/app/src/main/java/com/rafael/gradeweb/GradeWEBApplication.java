@@ -60,11 +60,9 @@ public class GradeWEBApplication extends Application {
         return usuario;
     }
 
-    public void setUsuario(ParseUser usuario) {
+    private void setUsuario(ParseUser usuario) {
         this.usuario = usuario;
     }
-
-
 
     public void updateUsuario() {
         this.usuario = ParseUser.getCurrentUser();

@@ -1,6 +1,7 @@
 package com.rafael.gradeweb;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -36,7 +37,6 @@ public class FragmentoListaDisciplinasSemestreSelecionado extends Fragment{
     //private ListView disciplinasListView;
     private TextView disciplinasTextView;
     private Button adicionarDisciplinaButton;
-    private LayoutInflater linflater;
 
     private ParseObject horarioObject;
 
@@ -46,7 +46,7 @@ public class FragmentoListaDisciplinasSemestreSelecionado extends Fragment{
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         myApp = GradeWEBApplication.getInstance();
-        this.linflater = inflater;
+        /*
         String horarioOjectId = (String) getArguments().getString("OBJECT_ID");
 
         ParseQuery<ParseObject> horarioQuery = ParseQuery.getQuery("Horario");
@@ -62,13 +62,22 @@ public class FragmentoListaDisciplinasSemestreSelecionado extends Fragment{
             e.printStackTrace();
             Log.d("FragmentoListaDisciplinasSemestreSelecionado", "ERROR!! exception happened 1");
         }
-
+*/
         View viewRaiz = inflater.inflate(R.layout.layout_fragmento_lista_disciplinas_semestre_selecionado, container, false);
 
-        //disciplinasListView = (ListView) viewRaiz.findViewById(R.id.disciplinas_semestres_list_view);
-        disciplinasTextView = (TextView) viewRaiz.findViewById(R.id.disciplinas_semestres_text_view);
-        adicionarDisciplinaButton = (Button)  viewRaiz.findViewById(R.id.adicionar_disciplina_button);
+        ListView listaDisciplinas = (ListView) viewRaiz.findViewById(R.id.disciplinas_semestres_list_view);
 
+
+        CustomAdapterListaDisciplinas mAdapter = new CustomAdapterListaDisciplinas(getActivity().getApplicationContext(), "Turma", "ENGG56");
+
+        listaDisciplinas.setAdapter(mAdapter);
+        mAdapter.loadObjects();
+
+
+        //disciplinasListView = (ListView) viewRaiz.findViewById(R.id.disciplinas_semestres_list_view);
+     //   disciplinasTextView = (TextView) viewRaiz.findViewById(R.id.disciplinas_semestres_text_view);
+        adicionarDisciplinaButton = (Button)  viewRaiz.findViewById(R.id.adicionar_disciplina_button);
+/*
         List<ParseObject> listaDeTurmasObjects = horarioObject.getList("turmas");
 
         List<ParseObject> listaDisciplinasObjects = new ArrayList<ParseObject>();
