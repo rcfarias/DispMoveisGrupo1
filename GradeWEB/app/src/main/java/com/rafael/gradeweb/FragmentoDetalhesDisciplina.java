@@ -30,6 +30,7 @@ public class FragmentoDetalhesDisciplina extends Fragment {
     private ScrollView minhaScroolView;
     private ListView disciplinasListView;
 
+
     private final String disciplinaLabel = "Disciplina";
 
     public FragmentoDetalhesDisciplina() {
@@ -102,7 +103,7 @@ public class FragmentoDetalhesDisciplina extends Fragment {
         final ArrayList listaDisciplinasNomes = new ArrayList();
 
         for(int j = 0; j < listaDisciplinasObjects.size(); j++) {
-            listaDisciplinasNomes.add(listaDisciplinasObjects.get(j).getString("DID") + " " + listaDisciplinasObjects.get(j).getString("name"));
+            listaDisciplinasNomes.add(listaDisciplinasObjects.get(j).getString("DID") + " - " + listaDisciplinasObjects.get(j).getString("name"));
         }
 
         ArrayAdapter<ArrayList> adapter = new ArrayAdapter<ArrayList>(this.getActivity(),
@@ -120,7 +121,7 @@ public class FragmentoDetalhesDisciplina extends Fragment {
 
 
                 String nome = (String) listaDisciplinasNomes.get(position);
-                String[] parts = nome.split(" ");
+                String[] parts = nome.split(" - ");
 
                 ParseQuery<ParseObject> disciplinaQuery = ParseQuery.getQuery("Disciplina");
                 disciplinaQuery.whereEqualTo("DID",(String) parts[0]);

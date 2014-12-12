@@ -1,8 +1,5 @@
 package com.rafael.gradeweb;
 
-//import com.rafael.gradeweb.GradeWEBApplication;
-
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -25,8 +22,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.parse.FindCallback;
-import com.parse.Parse;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -277,9 +272,9 @@ public class MainActivityDrawer extends Activity {
 
             }
 
-            View rootView = inflater.inflate(R.layout.semester_main_list_fragment, container, false);
+            View rootView = inflater.inflate(R.layout.layout_fragmento_lista_semesteres, container, false);
 
-            myListView = (ListView) rootView.findViewById(R.id.semestre_list_view);
+            myListView = (ListView) rootView.findViewById(R.id.semestres_list_view);
 
             //strListView = getResources().getStringArray(R.array.data_listView);
             //ArrayAdapter<String> objAdapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_expandable_list_item_1, strListView);
@@ -296,7 +291,7 @@ public class MainActivityDrawer extends Activity {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Toast.makeText(MainActivityDrawer.this, "You clicked" + (String) semestreList.get(position), 5000).show();
 
-                    fragment = new FragmentSemesterList();
+                    fragment = new FragmentoListaSemestreUsuario();
                     Bundle args = new Bundle();
 
                     args.putString("SEMESTRE",(String) semestreList.get(position));

@@ -22,7 +22,8 @@
         android:id="@+id/listViewDisciplinas"
         android:layout_gravity="center"
         android:paddingBottom="20dp"
-        android:paddingTop="20dp">
+        android:paddingTop="20dp"
+        android:background="#FFFFFF">
 
         </ListView>
 

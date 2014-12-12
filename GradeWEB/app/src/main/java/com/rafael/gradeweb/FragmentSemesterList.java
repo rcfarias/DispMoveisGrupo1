@@ -8,20 +8,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
-import com.parse.FindCallback;
-import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
-import com.parse.ParseUser;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
-
 
 
 public class FragmentSemesterList extends Fragment {
@@ -47,9 +40,9 @@ public class FragmentSemesterList extends Fragment {
         mApp = GradeWEBApplication.getInstance();
         //ParseUser usuario = mApp.getUsuario();
 
-        View viewRaiz = inflater.inflate(R.layout.semester_main_list_fragment, container, false);
+        View viewRaiz = inflater.inflate(R.layout.layout_fragmento_lista_semesteres, container, false);
 
-        semestresListView = (ListView) viewRaiz.findViewById(R.id.semestre_list_view);
+        semestresListView = (ListView) viewRaiz.findViewById(R.id.semestres_list_view);
 
 
         ParseQuery<ParseObject> turmaQuery = ParseQuery.getQuery("Horario");
