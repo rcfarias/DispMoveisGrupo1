@@ -2,10 +2,10 @@
 <merger version="2" >
 
     <dataSet config="main" >
-        <source path="C:\Users\Rafael\Desktop\NewVersion 2.0\GradeWEB\facebook\src\main\assets" />
+        <source path="C:\Users\Rafael Farias\Desktop\matc89 v4.0\GradeWEB\facebook\src\main\assets" />
     </dataSet>
     <dataSet config="debug" >
-        <source path="C:\Users\Rafael\Desktop\NewVersion 2.0\GradeWEB\facebook\src\debug\assets" />
+        <source path="C:\Users\Rafael Farias\Desktop\matc89 v4.0\GradeWEB\facebook\src\debug\assets" />
     </dataSet>
 
 </merger>

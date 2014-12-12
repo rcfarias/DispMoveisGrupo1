@@ -1,6 +1,7 @@
 package com.rafael.gradeweb;
 
 
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -17,8 +18,6 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.parse.FindCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -88,7 +87,7 @@ public class FragmentoListaDisciplinasSemestreSelecionado extends Fragment{
 
 
         disciplinasTextView.setText(detalhesTurmas);
-        disciplinasTextView.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
+        //disciplinasTextView.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
 
         //----------------------------------------------------------------------------------------------------
 
@@ -107,81 +106,15 @@ public class FragmentoListaDisciplinasSemestreSelecionado extends Fragment{
         adicionarDisciplinaButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                String horarioOjectId = (String) getArguments().getString("OBJECT_ID");
+                Intent intent = new Intent(getActivity(), ActivityAdicionarDisciplina.class);
+                intent.putExtra("EXTRA_OBJECT_ID", (String) horarioOjectId);
+                startActivity(intent);
+                Toast.makeText(getActivity(), "objectId = " + (String) horarioOjectId, 5000).show();
             }
         });
 
         return  viewRaiz;
-    }
-
-
-    public void showPopup(View anchorView) {
-
-        View popupView = linflater.inflate(R.layout.popup_selecionar_discplina, null);
-
-        PopupWindow popupWindow = new PopupWindow(popupView,
-                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-
-        // Example: If you have a TextView inside `popup_layout.xml`
-        //TextView tv = (TextView) popupView.findViewById(R.id.tv);
-        ListView lv = (ListView) popupView.findViewById(R.id.selecionar_turma_list_view);
-
-        //tv.setText(....);
-
-        ParseQuery<ParseObject> turmasQuery = ParseQuery.getQuery("Turma");
-        turmasQuery.include("disciplina");
-        turmasQuery.whereEqualTo("semestre", horarioObject.getString("semestre"));
-        turmasQuery.fromLocalDatastore();
-
-        List<ParseObject> turmas = new ArrayList<ParseObject>();
-        try {
-            turmas = turmasQuery.find();
-        }
-        catch (ParseException e) {
-            e.printStackTrace();
-        }
-        final List<ParseObject> turmasFinal = turmas;
-
-        ArrayList listaDiciplinas = new ArrayList();
-        for(ParseObject cada : turmas) {
-            ParseObject d = cada.getParseObject("disciplina");
-            listaDiciplinas.add(d.getString("DID") + " " + d.getString("name") + " - Professor: " + cada.getString("professor"));
-        }
-
-        ArrayAdapter<ArrayList> lAdapter = new ArrayAdapter<ArrayList>(this.getActivity(),
-                                                              android.R.layout.simple_expandable_list_item_1,
-                                                              listaDiciplinas);
-
-        lv.setAdapter(lAdapter);
-
-        lv.setOnItemClickListener( new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                List<ParseObject> lt = horarioObject.getList("turmas");
-                lt.add(turmasFinal.get(position));
-
-                horarioObject.put("turmas", Arrays.asList(lt));
-            }
-        });
-
-        // Initialize more widgets from `popup_layout.xml`
-
-        // If the PopupWindow should be focusable
-        popupWindow.setFocusable(true);
-
-        // If you need the PopupWindow to dismiss when when touched outside
-        popupWindow.setBackgroundDrawable(new ColorDrawable());
-
-        int location[] = new int[2];
-
-        // Get the View's(the one that was clicked in the Fragment) location
-        anchorView.getLocationOnScreen(location);
-
-        // Using location, the PopupWindow will be displayed right under anchorView
-        popupWindow.showAtLocation(anchorView, Gravity.NO_GRAVITY,
-                location[0], location[1] + anchorView.getHeight());
-
     }
 
 }

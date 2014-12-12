@@ -63,7 +63,7 @@ public class FragmentoListaSemestresUsuario extends Fragment {
 
         semestresList = new ArrayList();
 
-        for(ParseObject cada : listaHorarioObjectsFinal) {
+        for(ParseObject cada : listaHorarioObjects) {
 
             semestresList.add((String) cada.get("semestre"));
         }
