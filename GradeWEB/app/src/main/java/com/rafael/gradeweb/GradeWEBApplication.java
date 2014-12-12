@@ -38,7 +38,7 @@ public class GradeWEBApplication extends Application {
         super.onCreate();
         singleton = this;
 
-        Parse.enableLocalDatastore(this);
+        //Parse.enableLocalDatastore(this);
         Parse.initialize(this,
                 getString(R.string.parse_app_id),
                 getString(R.string.parse_client_key)
@@ -47,6 +47,7 @@ public class GradeWEBApplication extends Application {
         ParseFacebookUtils.initialize(getString(R.string.facebook_app_id));
 
         setUsuario(ParseUser.getCurrentUser());
+        setHorario(null);
 
         Log.d("GradeWEB", "GradeWEBApplication @onCreate");
 

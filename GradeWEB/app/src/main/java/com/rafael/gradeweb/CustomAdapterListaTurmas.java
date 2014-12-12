@@ -41,6 +41,7 @@ public class CustomAdapterListaTurmas extends ParseQueryAdapter {
                 query.whereEqualTo("semestre", semestre);
                 query.whereExists("horarioAulas");
                 query.orderByAscending("codigoTurma");
+                query.include("disciplina");
                 return query;
             }
         });

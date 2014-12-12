@@ -8,13 +8,44 @@
     android:paddingRight="20dp"
     android:gravity="center">
 
-    <TextView
+
+    <LinearLayout
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="25dp"
+            android:id="@+id/titulo_semestre_text_view"
+            android:textSize="19sp"
+            android:textColor="@color/text_color"
+            android:text="Semestre: "/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:id="@+id/text1"
+            android:textSize="19sp"
+            android:textColor="@color/text_color"
+            android:text="xxxx.x"/>
+
+        </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="horizontal">
+
+    <TextView
+        android:layout_width="130dp"
         android:layout_height="25dp"
-        android:id="@+id/text1"
-        android:textSize="19sp"
+        android:id="@+id/titulo_modificado_text_view"
+        android:textSize="16sp"
         android:textColor="@color/text_color"
-        android:text="Semestre  xxxx.x"/>
+        android:text="  Atualizado em: "/>
 
     <TextView
         android:layout_width="match_parent"
@@ -22,7 +53,9 @@
         android:id="@+id/timestamp"
         android:textSize="16sp"
         android:textColor="@color/text_color"
-        android:text="Atualizado em DATE"/>
+        android:text="DATE"/>
+
+    </LinearLayout>
 
     <View
         android:layout_width="match_parent"

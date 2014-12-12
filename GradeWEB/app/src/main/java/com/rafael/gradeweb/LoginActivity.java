@@ -68,6 +68,7 @@ public class LoginActivity extends Activity {
         loginOrLogoutButton = (Button) findViewById(R.id.login_or_logout_button);
         titleTextView.setText(R.string.profile_title_logged_in);
 
+        /*
         // Query for the Disciplina objects from Parse.
         ParseQuery<ParseObject> query = ParseQuery.getQuery(disciplinaLabel);
         query.include("Unidade");
@@ -93,7 +94,7 @@ public class LoginActivity extends Activity {
             }
         });
         //aqui
-
+*/
 
         loginOrLogoutButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -187,6 +188,7 @@ public class LoginActivity extends Activity {
         }
         loginOrLogoutButton.setText(R.string.profile_logout_button_label);
 
+        /*
         // Query for the Horario objects from Parse.
         ParseQuery<ParseObject> horariosUsuarioQuery = ParseQuery.getQuery(horarioLabel);
         horariosUsuarioQuery.whereEqualTo("usuario", myApplication.getUsuario());
@@ -214,6 +216,7 @@ public class LoginActivity extends Activity {
                 });
             }
         });
+        */
 
         Intent intent = new Intent(this, MainActivityDrawer.class);
         startActivity(intent);

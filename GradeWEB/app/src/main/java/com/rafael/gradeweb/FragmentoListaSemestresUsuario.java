@@ -54,10 +54,7 @@ public class FragmentoListaSemestresUsuario extends Fragment {
 
         adicionarButton = (Button) rootView.findViewById(R.id.adicionar_semestre_button);
 
-        CustomAdapterListaSemestre myAdapter = new CustomAdapterListaSemestre(context);
-
-        listaSemestresListView.setAdapter(myAdapter);
-        myAdapter.loadObjects();
+        updateAdapter();
 
         listaSemestresListView.setOnItemClickListener( new AdapterView.OnItemClickListener() {
             @Override
@@ -161,6 +158,7 @@ public class FragmentoListaSemestresUsuario extends Fragment {
                                         novoHorario.save();
 
                                         GradeWEBApplication.getInstance().setHorario(novoHorario);
+                                        updateAdapter();
                                     }
                                 }
                                 else {
@@ -215,4 +213,9 @@ public class FragmentoListaSemestresUsuario extends Fragment {
         }
     }
 
+    public void updateAdapter() {
+        CustomAdapterListaSemestre myAdapter = new CustomAdapterListaSemestre(context);
+        listaSemestresListView.setAdapter(myAdapter);
+        myAdapter.loadObjects();
+    }
 }

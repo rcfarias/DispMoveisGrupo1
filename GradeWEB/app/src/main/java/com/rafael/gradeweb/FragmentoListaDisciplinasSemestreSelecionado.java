@@ -43,17 +43,18 @@ public class FragmentoListaDisciplinasSemestreSelecionado extends Fragment{
     private ParseObject horarioObject;
     private ArrayList listaIdsTurmas;
 
-    private CustomAdapterListaDisciplinas mAdapter;
+    //private CustomAdapterListaDisciplinas mAdapter;
     private ListView listaDisciplinas;
 
     public void setHorarioObject(ParseObject horario) {
+
         this.horarioObject = horario;
     }
 
     public FragmentoListaDisciplinasSemestreSelecionado() {}
 
     public void resetAdapter(ArrayList listaIdsTurmas) {
-        mAdapter = new CustomAdapterListaDisciplinas(context, listaIdsTurmas);
+        CustomAdapterListaDisciplinas mAdapter = new CustomAdapterListaDisciplinas(context, listaIdsTurmas);
         listaDisciplinas.setAdapter(mAdapter);
         mAdapter.loadObjects();
     }
@@ -102,11 +103,16 @@ public class FragmentoListaDisciplinasSemestreSelecionado extends Fragment{
                         int index = -1;
 
                         for( int j = 0; j < listaTurmas.size(); j++) {
-                            if(listaTurmas.get(j).getObjectId() == turma.getObjectId()) {
+                            Log.d("Buscando a turma", "turma.getObjectId() = " + turma.getObjectId() + " e listaTurmas.get(j).getObjectId() = " + listaTurmas.get(j).getObjectId());
+
+                            if(listaTurmas.get(j).getObjectId().equals(turma.getObjectId())) {
+                                Log.d("buscando ", " atribui index");
                                 index = j;
                             }
 
                         }
+
+                        Log.d("Buscando a turma", "Index = " + index);
 
                         if(index != -1) {
                             listaTurmas.remove(index);
@@ -115,24 +121,21 @@ public class FragmentoListaDisciplinasSemestreSelecionado extends Fragment{
 
                             try {
                                 horario.save();
-                                GradeWEBApplication.getInstance().setHorario(horario);
 
                                 Toast.makeText(getActivity().getApplicationContext(), "Disciplina removida do horário", 5000).show();
 
+                                GradeWEBApplication.getInstance().setHorario(horario);
                                 updateAdapter();
 
-                            } catch (ParseException e) {
-                                e.printStackTrace();
                             }
-
-                            FragmentoListaDisciplinasSemestreSelecionado f = (FragmentoListaDisciplinasSemestreSelecionado) getFragmentManager().findFragmentById(R.id.disciplinas_semestres_list_view);
-
-                            if(f != null) {
-                                f.updateAdapter();
+                            catch (ParseException e) {
+                                e.printStackTrace();
+                                Toast.makeText(getActivity().getApplicationContext(), "Não foi possível salvar o horário", 5000).show();
                             }
                         }
-                        else
-                            Toast.makeText(getActivity().getApplicationContext(), "Não foi possível excluir!", 5000).show();
+                        else {
+                            Toast.makeText(getActivity().getApplicationContext(), "Não foi possível excluir! Disciplina não está presente no horário!!", 5000).show();
+                        }
                     }
                 });
                 builder.setNegativeButton("Não", new DialogInterface.OnClickListener() {
@@ -219,10 +222,8 @@ public class FragmentoListaDisciplinasSemestreSelecionado extends Fragment{
             listaIdsTurmas.add(turmas.get(j).getObjectId());
         }
 
-        mAdapter = new CustomAdapterListaDisciplinas(context, listaIdsTurmas);
+        CustomAdapterListaDisciplinas mAdapter = new CustomAdapterListaDisciplinas(context, listaIdsTurmas);
         listaDisciplinas.setAdapter(mAdapter);
         mAdapter.loadObjects();
-        mAdapter.notifyDataSetInvalidated();
-
     }
 }
