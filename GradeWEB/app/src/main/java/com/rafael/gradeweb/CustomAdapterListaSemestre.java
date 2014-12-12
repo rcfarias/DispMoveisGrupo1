@@ -15,20 +15,23 @@ import com.parse.ParseQueryAdapter;
 /**
  * Created by Rafael on 11/29/2014.
  */
-public class CustomListAdapter extends ParseQueryAdapter {
-    public CustomListAdapter(Context context) {
+public class CustomAdapterListaSemestre extends ParseQueryAdapter {
+    public CustomAdapterListaSemestre(Context context) {
         // Use the QueryFactory to construct a PQA that will only show
         // Todos marked as high-pri
         super(context, new ParseQueryAdapter.QueryFactory<ParseObject>() {
             public ParseQuery create() {
                 ParseQuery query = new ParseQuery("Horario");
                 query.whereEqualTo("usuario", GradeWEBApplication.getInstance().getUsuario());
+                query.include("turmas");
+                query.include("turmas.disciplina");
+                query.orderByAscending("semestre");
                 return query;
             }
         });
     }
 
-    public CustomListAdapter(Context context, final String className, final String attribute1) {
+    public CustomAdapterListaSemestre(Context context, final String className, final String attribute1) {
         super(context, new ParseQueryAdapter.QueryFactory<ParseObject>() {
             public ParseQuery create() {
                 ParseQuery query = new ParseQuery("Horario");

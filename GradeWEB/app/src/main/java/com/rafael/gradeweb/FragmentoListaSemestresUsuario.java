@@ -2,8 +2,10 @@ package com.rafael.gradeweb;
 
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.util.Log;
@@ -11,19 +13,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 
@@ -45,7 +46,7 @@ public class FragmentoListaSemestresUsuario extends Fragment {
     }
 
     @Override
-    public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView( LayoutInflater inflater, ViewGroup container, final Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.layout_fragmento_lista_semesteres, container, false);
 
@@ -53,7 +54,7 @@ public class FragmentoListaSemestresUsuario extends Fragment {
 
         adicionarButton = (Button) rootView.findViewById(R.id.adicionar_semestre_button);
 
-        CustomListAdapter myAdapter = new CustomListAdapter(context);
+        CustomAdapterListaSemestre myAdapter = new CustomAdapterListaSemestre(context);
 
         listaSemestresListView.setAdapter(myAdapter);
         myAdapter.loadObjects();
@@ -68,12 +69,19 @@ public class FragmentoListaSemestresUsuario extends Fragment {
 
                 ParseObject horario = (ParseObject) adapter.getItemAtPosition(position);
 
-                GradeWEBApplication.getInstance().setHorario(horario);
-
-                List<ParseObject> listaTurmas = horario.getList("turmas");
+                List<ParseObject> listaDeTurmas = horario.getList("turmas");
                 ArrayList listaIdsTurmas = new ArrayList();
 
-                for(ParseObject cadaTurma : listaTurmas) {
+                ordenaTurmasPorDID(listaDeTurmas);
+
+                horario.put("turmas", listaDeTurmas);
+                horario.saveInBackground();
+
+                GradeWEBApplication.getInstance().setHorario(horario);
+
+                Log.d("Ordenado ?", "veremos");
+                for(ParseObject cadaTurma : listaDeTurmas) {
+                    Log.d("Ordenado ?", cadaTurma.getParseObject("disciplina").getString("DID"));
                     listaIdsTurmas.add(cadaTurma.getObjectId());
                 }
 
@@ -94,10 +102,117 @@ public class FragmentoListaSemestresUsuario extends Fragment {
             @Override
             public void onClick(View view) {
 
+                // 1. Instantiate an AlertDialog.Builder with its constructor
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+                // Set an EditText view to get user input
+                final EditText input = new EditText(getActivity());
+
+
+                // 2. Chain together various setter methods to set the dialog characteristics
+                builder.setMessage("Informe o semestre a ser adicionado:")
+                        .setTitle("Adicionar semestre");
+
+                builder.setView(input);
+
+                // Add the buttons
+                builder.setPositiveButton("Adicionar", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User clicked OK button
+
+                        String semestre = input.getText().toString();
+                        // Do something with value!
+
+                        Log.d("positiveButton", "semestre informado = " + semestre);
+
+                        ParseQuery semestreQuery = new ParseQuery("Semestre");
+                        semestreQuery.whereEqualTo("codigoSemestre", semestre);
+
+                        try {
+                            ParseObject semestreObject = semestreQuery.getFirst();
+
+                            if(semestreObject != null) {
+
+                                Log.d("positiveButton", "objeto semestre foi diferente de null");
+
+                                if (semestreObject.getBoolean("isDisponivel")) {
+
+                                    Log.d("positiveButton", "semestre isDisponivel!!");
+
+                                    ParseQuery horarioQuery = new ParseQuery("Horario");
+                                    horarioQuery.whereEqualTo("usuario", GradeWEBApplication.getInstance().getUsuario());
+                                    horarioQuery.whereEqualTo("semestre", semestre);
+
+                                    try {
+                                        ParseObject horarioObject = horarioQuery.getFirst();
+
+                                        Log.d("positiveButton", "horarioObject NÃo foi null... NÃO posso criar o horario");
+
+                                        Toast.makeText(getActivity().getApplicationContext(), "Não foi possível criar horário. Horário já cadastrado para o semestre especificado!", 5000).show();
+                                    }
+                                    catch (ParseException e) {
+
+                                        Log.d("positiveButton", "horarioObject foi null, posso criar o horario");
+
+                                        ParseObject novoHorario = new ParseObject("Horario");
+                                        novoHorario.put("usuario", GradeWEBApplication.getInstance().getUsuario());
+                                        novoHorario.put("semestre", semestre);
+                                        novoHorario.put("turmas", new ArrayList());
+                                        novoHorario.save();
+
+                                        GradeWEBApplication.getInstance().setHorario(novoHorario);
+                                    }
+                                }
+                                else {
+
+                                    Log.d("positiveButton", "semestre !isDisponivel");
+
+                                    Toast.makeText(getActivity().getApplicationContext(), "Não foi possível criar horário. Semestre não está disponível!", 5000).show();
+                                }
+                            }
+                            else {
+                                Toast.makeText(getActivity().getApplicationContext(), "Não foi possível criar horário. Não há registros desse semestre!", 5000).show();
+                            }
+
+                        }
+                        catch (ParseException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getActivity().getApplicationContext(), "Não foi possível criar horário. Tente novamente mais tarde!", 5000).show();
+                        }
+
+
+                    }
+                });
+
+                builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User cancelled the dialog
+                    }
+                });
+
+                // 3. Get the AlertDialog from create()
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
             }
         });
 
         return rootView;
     } // end of onCreateView
+
+
+    public void ordenaTurmasPorDID(List<ParseObject> turmas) {
+        if (!turmas.isEmpty()) {
+            Collections.sort(turmas, new Comparator<ParseObject>() {
+                @Override
+                public int compare(ParseObject t1, ParseObject t2) {
+                    //You should ensure that list doesn't contain null values!
+                    Log.d("Comparando", t1.getParseObject("disciplina").getString("DID") + " com " +t2.getParseObject("disciplina").getString("DID"));
+
+                    return t1.getParseObject("disciplina").getString("DID").compareTo(t2.getParseObject("disciplina").getString("DID"));
+                }
+            });
+        }
+    }
 
 }

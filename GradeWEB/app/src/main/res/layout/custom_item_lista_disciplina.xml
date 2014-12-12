@@ -2,7 +2,7 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="94dp"
+    android:layout_height="wrap_content"
     android:background="@android:color/transparent"
     android:orientation="vertical"
     android:paddingLeft="10dp"
@@ -10,12 +10,12 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="33dp"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_gravity="center">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="80dp"
             android:layout_height="33dp"
             android:maxWidth="80dp"
             android:id="@+id/campo_did"
@@ -23,18 +23,18 @@
             android:textColor="@color/text_color"
             android:text="ENGG56"
             android:gravity="center_vertical"
-            android:layout_gravity="left"/>
+            android:layout_gravity="center_vertical|left"/>
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="33dp"
+            android:layout_height="wrap_content"
             android:maxWidth="305dp"
-            android:maxHeight="33dp"
             android:id="@+id/campo_nome_disciplina"
             android:textSize="14sp"
             android:textColor="@color/text_color"
             android:text="Nome da Disciplina Aqui"
-            android:gravity="center"/>
+            android:gravity="center"
+            android:layout_gravity="center"/>
 
     </LinearLayout>
 
@@ -45,7 +45,7 @@
         android:layout_gravity="center">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="80dp"
             android:layout_height="30dp"
             android:maxWidth="80dp"
             android:id="@+id/campo_codigo_turma"
@@ -66,14 +66,33 @@
 
     </LinearLayout>
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:id="@+id/campo_dias_horario"
-        android:textSize="14sp"
-        android:textColor="@color/text_color"
-        android:text="ddd hh:mm-hh:mm / ddd hh:mm-hh:mm"
-        android:gravity="center_vertical|start"/>
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center">
+
+
+        <TextView
+            android:layout_width="80dp"
+            android:layout_height="30dp"
+            android:maxWidth="80dp"
+            android:id="@+id/campo_titulo_horario_text_view"
+            android:textSize="14sp"
+            android:textColor="@color/text_color"
+            android:text="Horario:"
+            android:gravity="center_vertical"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/campo_dias_horario"
+            android:textSize="14sp"
+            android:textColor="@color/text_color"
+            android:text="ddd hh:mm-hh:mm\nddd hh:mm-hh:mm\nddd hh:mm-hh:mm"
+            android:gravity="center"/>
+
+    </LinearLayout>
 
     <View
         android:layout_width="match_parent"

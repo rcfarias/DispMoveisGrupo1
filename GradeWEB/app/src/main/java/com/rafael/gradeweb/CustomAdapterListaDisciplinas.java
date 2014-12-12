@@ -27,7 +27,7 @@ public class CustomAdapterListaDisciplinas extends ParseQueryAdapter {
                 ParseQuery query = new ParseQuery("Turma");
                 query.whereContainedIn("objectId", listaIDS);
                 query.include("disciplina");
-                query.orderByAscending("DID");
+                query.orderByAscending("disciplina");
                 return query;
             }
         });
@@ -69,8 +69,19 @@ public class CustomAdapterListaDisciplinas extends ParseQueryAdapter {
         TextView codigoTurmaTextView = (TextView) v.findViewById(R.id.campo_codigo_turma);
         codigoTurmaTextView.setText(object.getString("codigoTurma"));
 
+        String horario = object.getString("horarioAulas");
+
+        String dias[] = horario.split("/");
+
+        String diasFormatados = "";
+        String fimDeLinha = System.getProperty("line.separator");
+
+        for (int j = 0; j < dias.length; j++) {
+            diasFormatados += dias[j] + fimDeLinha;
+        }
+
         TextView horarioTextView = (TextView) v.findViewById(R.id.campo_dias_horario);
-        horarioTextView.setText(object.getString("horarioAulas"));
+        horarioTextView.setText(diasFormatados);
 
         TextView professorTextView = (TextView) v.findViewById(R.id.campo_professor);
         professorTextView.setText(object.getString("professor"));
