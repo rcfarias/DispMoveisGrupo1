@@ -1,59 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:layout_alignParentLeft="true"
-    android:background="@color/background">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="91dp"
+    android:background="@android:color/transparent"
+    android:orientation="vertical"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:orientation="vertical"
-        android:layout_alignParentRight="true">
+        android:layout_height="30dp"
+        android:orientation="horizontal"
+        android:layout_gravity="center">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:maxWidth="80dp"
+            android:id="@+id/campo_did"
+            android:textSize="18.5sp"
+            android:textColor="@color/text_color"
+            android:text="ENGG56"
+            android:gravity="center_vertical"
+            android:layout_gravity="left"/>
 
-            <TextView
-                android:layout_width="80dp"
-                android:layout_height="40dp"
-                android:textSize="10.5sp"
-                android:textColor="@color/text_color"
-                android:id="@+id/campo_did"/>
-
-            <TextView
-                android:layout_width="80dp"
-                android:layout_height="40dp"
-                android:textSize="10.5sp"
-                android:textColor="@color/text_color"
-                android:id="@+id/campo_nome_disciplina" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="80dp"
-                android:layout_height="40dp"
-                android:textSize="10.5sp"
-                android:textColor="@color/text_color"
-                android:id="@+id/campo_professor"/>
-
-            <TextView
-                android:layout_width="80dp"
-                android:layout_height="40dp"
-                android:textSize="10.5sp"
-                android:textColor="@color/text_color"
-                android:id="@+id/campo_dias"/>
-
-        </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:maxWidth="305dp"
+            android:id="@+id/campo_nome_disciplina"
+            android:textSize="18.5sp"
+            android:textColor="@color/text_color"
+            android:text="Nome da Disciplina Aqui"
+            android:gravity="center_vertical"/>
 
     </LinearLayout>
 
-</RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:orientation="horizontal"
+        android:layout_gravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:maxWidth="80dp"
+            android:id="@+id/campo_codigo_turma"
+            android:textSize="18.5sp"
+            android:textColor="@color/text_color"
+            android:text="000000"
+            android:gravity="center_vertical"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:maxWidth="305dp"
+            android:id="@+id/campo_professor"
+            android:textSize="18.5sp"
+            android:textColor="@color/text_color"
+            android:text="Nome do Professor Aqui"
+            android:gravity="center_vertical"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:id="@+id/campo_dias_horario"
+        android:textSize="18.0sp"
+        android:textColor="@color/text_color"
+        android:text="ddd hh:mm-hh:mm / ddd hh:mm-hh:mm"
+        android:gravity="center_vertical|left"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray">
+
+    </View>
+
+</LinearLayout>

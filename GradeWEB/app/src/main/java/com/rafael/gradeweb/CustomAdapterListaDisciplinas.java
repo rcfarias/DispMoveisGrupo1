@@ -13,8 +13,23 @@ import com.parse.ParseQuery;
 import com.parse.ParseQueryAdapter;
 
 public class CustomAdapterListaDisciplinas extends ParseQueryAdapter {
+    private ParseObject horario;
 
     public CustomAdapterListaDisciplinas(Context context, String className, final String DID) {
+
+        super(context,new ParseQueryAdapter.QueryFactory<ParseObject>() {
+            public ParseQuery create() {
+                ParseQuery innerQuery = new ParseQuery("Disciplina");
+                innerQuery.whereEqualTo("DID", DID);
+                ParseQuery query = new ParseQuery("Turma");
+                query.whereMatchesQuery("disciplina", innerQuery);
+                query.include("disciplina");
+                return query;
+            }
+        });
+    }
+
+    public CustomAdapterListaDisciplinas(Context context, ParseObject horario) {
 
         super(context,new ParseQueryAdapter.QueryFactory<ParseObject>() {
             public ParseQuery create() {
@@ -44,13 +59,14 @@ public class CustomAdapterListaDisciplinas extends ParseQueryAdapter {
         TextView nameTextView = (TextView) v.findViewById(R.id.campo_nome_disciplina);
         nameTextView.setText(object.getParseObject("disciplina").getString("name"));
 
-        TextView horaioTextView = (TextView) v.findViewById(R.id.campo_dias);
-        String horString = object.getString("horarioAulas");
-        horaioTextView.setText(horString);
+        TextView codigoTurmaTextView = (TextView) v.findViewById(R.id.campo_codigo_turma);
+        codigoTurmaTextView.setText(object.getString("codigoTurma"));
+
+        TextView horarioTextView = (TextView) v.findViewById(R.id.campo_dias_horario);
+        horarioTextView.setText(object.getString("horarioAulas"));
 
         TextView professorTextView = (TextView) v.findViewById(R.id.campo_professor);
-        String pString = object.getString("professor");
-        professorTextView.setText(pString);
+        professorTextView.setText(object.getString("professor"));
 
 
         // Add a reminder of how long this item has been outstanding

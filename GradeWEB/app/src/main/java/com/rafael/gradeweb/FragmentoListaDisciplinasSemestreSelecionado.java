@@ -46,14 +46,14 @@ public class FragmentoListaDisciplinasSemestreSelecionado extends Fragment{
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         myApp = GradeWEBApplication.getInstance();
-        /*
+
         String horarioOjectId = (String) getArguments().getString("OBJECT_ID");
 
         ParseQuery<ParseObject> horarioQuery = ParseQuery.getQuery("Horario");
         horarioQuery.include("turmas");
         horarioQuery.include("turmas.disciplina");
-        //horarioQuery.whereEqualTo("objectId", (String) getArguments().getString("OBJECT_ID"))
-        horarioQuery.fromLocalDatastore();
+        horarioQuery.whereEqualTo("objectId", (String) getArguments().getString("OBJECT_ID"))
+        //horarioQuery.fromLocalDatastore();
 
         horarioObject = null;
         try {
@@ -62,7 +62,7 @@ public class FragmentoListaDisciplinasSemestreSelecionado extends Fragment{
             e.printStackTrace();
             Log.d("FragmentoListaDisciplinasSemestreSelecionado", "ERROR!! exception happened 1");
         }
-*/
+
         View viewRaiz = inflater.inflate(R.layout.layout_fragmento_lista_disciplinas_semestre_selecionado, container, false);
 
         ListView listaDisciplinas = (ListView) viewRaiz.findViewById(R.id.disciplinas_semestres_list_view);
@@ -115,11 +115,25 @@ public class FragmentoListaDisciplinasSemestreSelecionado extends Fragment{
         adicionarDisciplinaButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String horarioOjectId = (String) getArguments().getString("OBJECT_ID");
-                Intent intent = new Intent(getActivity(), ActivityAdicionarDisciplina.class);
-                intent.putExtra("EXTRA_OBJECT_ID", (String) horarioOjectId);
-                startActivity(intent);
-                Toast.makeText(getActivity(), "objectId = " + (String) horarioOjectId, 5000).show();
+                //String horarioOjectId = (String) getArguments().getString("OBJECT_ID");
+                //Intent intent = new Intent(getActivity(), ActivityAdicionarDisciplina.class);
+                //intent.putExtra("EXTRA_OBJECT_ID", (String) horarioOjectId);
+                //startActivity(intent);
+                //Toast.makeText(getActivity(), "objectId = " + (String) horarioOjectId, 5000).show();
+
+                ParseQuery<ParseObject> turmasQuery = ParseQuery.getQuery("Turmas");
+                turmasQuery.include("disciplina");
+
+                List<ParseObject> listaTurmas = new ArrayList<ParseObject>();
+
+                try {
+                    listaTurmas = turmasQuery.find();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                FragmentoSelecionarTurma f = new FragmentoSelecionarTurma();
+                f.show(getFragmentManager(), "meu dialog");
             }
         });
 
