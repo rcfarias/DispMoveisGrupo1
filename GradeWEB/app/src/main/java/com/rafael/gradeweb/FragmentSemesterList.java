@@ -22,9 +22,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-/**
- * Created by Rafael on 11/23/2014.
- */
+
+
 public class FragmentSemesterList extends Fragment {
 
     private GradeWEBApplication mApp;

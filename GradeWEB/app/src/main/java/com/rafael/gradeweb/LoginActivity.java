@@ -15,8 +15,12 @@ import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.model.GraphUser;
+import com.parse.DeleteCallback;
+import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseACL;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.ParseAnalytics;
 import com.parse.SignUpCallback;
@@ -27,6 +31,7 @@ import com.parse.ui.ParseLoginBuilder;
 import com.parse.ParseFacebookUtils;
 
 import java.util.Arrays;
+import java.util.List;
 
 import android.util.Log;
 
@@ -37,6 +42,7 @@ import org.json.JSONObject;
 public class LoginActivity extends Activity {
     private static final int LOGIN_REQUEST = 0;
     private final String TAG = "TKT";
+    private final String disciplinaLabel = "Disciplina";
 
     private TextView titleTextView;
     private TextView emailTextView;
@@ -60,6 +66,31 @@ public class LoginActivity extends Activity {
         nameTextView = (TextView) findViewById(R.id.profile_name);
         loginOrLogoutButton = (Button) findViewById(R.id.login_or_logout_button);
         titleTextView.setText(R.string.profile_title_logged_in);
+
+        // Query for the latest objects from Parse.
+        ParseQuery<ParseObject> query = ParseQuery.getQuery(disciplinaLabel);
+        query.findInBackground(new FindCallback<ParseObject>() {
+            public void done(final List<ParseObject> listaDisciplinas, ParseException e) {
+                if (e != null) {
+                    // There was an error or the network wasn't available.
+                    return;
+                }
+
+                // Release any objects previously pinned for this query.
+                ParseObject.unpinAllInBackground(disciplinaLabel, listaDisciplinas, new DeleteCallback() {
+                    public void done(ParseException e) {
+                        if (e != null) {
+                            // There was some error.
+                            return;
+                        }
+
+                        // Add the latest results for this query to the cache.
+                        ParseObject.pinAllInBackground(disciplinaLabel, listaDisciplinas);
+                    }
+                });
+            }
+        });
+        //aqui
 
 
         loginOrLogoutButton.setOnClickListener(new OnClickListener() {

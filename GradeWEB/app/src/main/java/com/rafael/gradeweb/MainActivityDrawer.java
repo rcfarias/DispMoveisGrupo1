@@ -149,11 +149,14 @@ public class MainActivityDrawer extends Activity {
                 //        .getImgResID());
                 break;
             case 4:
-                fragment = new FragmentOne();
-                args.putString(FragmentOne.ITEM_NAME, dataList.get(possition)
-                        .getItemName());
-                args.putInt(FragmentOne.IMAGE_RESOURCE_ID, dataList.get(possition)
-                        .getImgResID());
+                //fragment = new FragmentOne();
+                //args.putString(FragmentOne.ITEM_NAME, dataList.get(possition)
+                //        .getItemName());
+                //args.putInt(FragmentOne.IMAGE_RESOURCE_ID, dataList.get(possition)
+                //       .getImgResID());
+
+                fragment = new FragmentoDetalhesDisciplina();
+
                 break;
             case 5:
                 fragment = new FragmentOne();
