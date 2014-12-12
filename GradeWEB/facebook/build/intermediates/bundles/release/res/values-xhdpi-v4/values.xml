@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- From: file:/C:/Users/Rafael%20Farias/Desktop/ANDROID%20v%201%200/GradeWEB/facebook/res/values-xhdpi/dimens.xml -->
+    <!-- From: file:/C:/Users/Rafael/Desktop/NewVersion/GradeWEB/facebook/res/values-xhdpi/dimens.xml -->
     <eat-comment />
 
     <dimen name="com_facebook_picker_divider_width">2px</dimen>

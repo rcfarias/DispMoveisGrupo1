@@ -25,6 +25,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.parse.Parse;
 import com.parse.ParseUser;
@@ -158,11 +159,11 @@ public class MainActivityDrawer extends Activity {
                         .getImgResID());
                 break;
             case 3:
-                fragment = new FragmentOne();
-                args.putString(FragmentOne.ITEM_NAME, dataList.get(possition)
-                        .getItemName());
-                args.putInt(FragmentOne.IMAGE_RESOURCE_ID, dataList.get(possition)
-                        .getImgResID());
+                fragment = new FragmentSemesterList();
+                //args.putString(FragmentOne.ITEM_NAME, dataList.get(possition)
+                //        .getItemName());
+                //args.putInt(FragmentOne.IMAGE_RESOURCE_ID, dataList.get(possition)
+                //        .getImgResID());
                 break;
             case 4:
                 fragment = new FragmentOne();
@@ -287,7 +288,9 @@ public class MainActivityDrawer extends Activity {
         }
     }
 
-    public static class PlaceholderFragment extends Fragment {
+    public class PlaceholderFragment extends Fragment {
+
+        private GradeWEBApplication myApp;
 
         private ListView myListView;
 
@@ -302,6 +305,8 @@ public class MainActivityDrawer extends Activity {
                                   ViewGroup container,
                                   Bundle savedInstanceState) {
 
+            myApp = GradeWEBApplication.getInstance();
+
             View rootView = inflater.inflate(R.layout.semester_main_list_fragment, container, false);
 
 
@@ -309,9 +314,32 @@ public class MainActivityDrawer extends Activity {
 
             strListView = getResources().getStringArray(R.array.data_listView);
 
-            ArrayAdapter<String> objAdapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_list_item_1, strListView);
+            ArrayAdapter<String> objAdapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_expandable_list_item_1, strListView);
 
             myListView.setAdapter(objAdapter);
+
+            myListView.setOnItemClickListener( new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Toast.makeText(MainActivityDrawer.this, "You clicked" + strListView[position], 5000).show();
+
+                    //FragmentManager frgManager;
+                    //Fragment fragment;
+
+                   // fragment = new PlaceholderFragment();
+
+                    fragment = new FragmentSemesterList();
+                    Bundle args = new Bundle();
+
+                    args.putString("SEMESTRE",strListView[position]);
+
+                    fragment.setArguments(args);
+                    frgManager = getFragmentManager();
+                    frgManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+                    
+
+                }
+            });
 
             return rootView;
         } // end of onCreateView

@@ -78,5 +78,18 @@
 
     </string-array>
 
+    <string-array name="disc_listView">
+        <item>Disciplina 1</item>
+        <item>Disciplina 2</item>
+        <item>Disciplina 3</item>
+        <item>Disciplina 4</item>
+        <item>Disciplina 5</item>
+        <item>Disciplina 6</item>
+        <item>Disciplina 7</item>
+        <item>Disciplina 8</item>
+
+
+    </string-array>
+
 
 </resources>
