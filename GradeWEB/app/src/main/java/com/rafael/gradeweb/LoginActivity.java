@@ -70,6 +70,7 @@ public class LoginActivity extends Activity {
 
         // Query for the Disciplina objects from Parse.
         ParseQuery<ParseObject> query = ParseQuery.getQuery(disciplinaLabel);
+        query.include("Unidade");
         query.findInBackground(new FindCallback<ParseObject>() {
             public void done(final List<ParseObject> listaDisciplinas, ParseException e) {
                 if (e != null) {
@@ -190,6 +191,8 @@ public class LoginActivity extends Activity {
         ParseQuery<ParseObject> horariosUsuarioQuery = ParseQuery.getQuery(horarioLabel);
         horariosUsuarioQuery.whereEqualTo("usuario", myApplication.getUsuario());
         horariosUsuarioQuery.include("turmas");
+        horariosUsuarioQuery.include("turmas.disciplina");
+        //horariosUsuarioQuery.include("turmas.");
         horariosUsuarioQuery.findInBackground(new FindCallback<ParseObject>() {
             public void done(final List<ParseObject> listaHorariosUsuario, ParseException e) {
                 if (e != null) {

@@ -46,47 +46,6 @@ public class FragmentoDetalhesDisciplina extends Fragment {
 
         disciplinasListView = (ListView) viewRaiz.findViewById(R.id.listViewDisciplinas);
 
-        //ParseQueryAdapter<ParseObject> adapter = new ParseQueryAdapter<ParseObject>(getActivity(), "Disciplina",);
-        //adapter.setTextKey("name");
-
-        /*
-        ParseQueryAdapter<ParseObject> adapter =
-                new ParseQueryAdapter<ParseObject>(getActivity(), new ParseQueryAdapter.QueryFactory<ParseObject>() {
-                    public ParseQuery<ParseObject> create() {
-                        // Here we can configure a ParseQuery to our heart's desire.
-                        ParseQuery query = new ParseQuery("Disciplina");
-                        query.orderByAscending("DID");
-                        return query;
-                    }
-                });
-
-        adapter.setTextKey("name");
-        */
-        /*
-        // Query for the latest objects from Parse.
-        ParseQuery<ParseObject> query = ParseQuery.getQuery(disciplinaLabel);
-        query.findInBackground(new FindCallback<ParseObject>() {
-            public void done(final List<ParseObject> listaDisciplinas, ParseException e) {
-                if (e != null) {
-                    // There was an error or the network wasn't available.
-                    return;
-                }
-
-                // Release any objects previously pinned for this query.
-                ParseObject.unpinAllInBackground(disciplinaLabel, listaDisciplinas, new DeleteCallback() {
-                    public void done(ParseException e) {
-                        if (e != null) {
-                            // There was some error.
-                            return;
-                        }
-
-                        // Add the latest results for this query to the cache.
-                        ParseObject.pinAllInBackground(disciplinaLabel, listaDisciplinas);
-                    }
-                });
-            }
-        });
-        */
         ParseQuery<ParseObject> listaDisciplinasQuery = ParseQuery.getQuery("Disciplina");
         listaDisciplinasQuery.selectKeys(Arrays.asList("DID", "name"));
         listaDisciplinasQuery.orderByAscending("DID");
@@ -107,8 +66,8 @@ public class FragmentoDetalhesDisciplina extends Fragment {
         }
 
         ArrayAdapter<ArrayList> adapter = new ArrayAdapter<ArrayList>(this.getActivity(),
-                                                                       android.R.layout.simple_expandable_list_item_1,
-                                                                        listaDisciplinasNomes);
+                android.R.layout.simple_expandable_list_item_1,
+                listaDisciplinasNomes);
 
         disciplinasListView.setAdapter(adapter);
 
@@ -125,6 +84,7 @@ public class FragmentoDetalhesDisciplina extends Fragment {
 
                 ParseQuery<ParseObject> disciplinaQuery = ParseQuery.getQuery("Disciplina");
                 disciplinaQuery.whereEqualTo("DID",(String) parts[0]);
+                disciplinaQuery.include("Unidade");
                 disciplinaQuery.selectKeys(Arrays.asList("description"));
                 disciplinaQuery.fromLocalDatastore();
 
@@ -140,9 +100,11 @@ public class FragmentoDetalhesDisciplina extends Fragment {
 
                 ParseObject obj = disciplinaDescription.get(0);
 
+                ParseObject uni = obj.getParseObject("Unidade");
+
                 final String fimDeLinha = System.getProperty("line.separator");
 
-                detalhesTextView.setText(nome + fimDeLinha + fimDeLinha  + (String) obj.getString("description"));
+                detalhesTextView.setText(nome + fimDeLinha + uni.getString("name") + fimDeLinha + fimDeLinha  + (String) obj.getString("description"));
                 detalhesTextView.setTextSize((float) 20.5);
                 //detalhesTextView.setText((String) disciplinaDescription.get(0).getString("descriprion"));
 

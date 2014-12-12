@@ -1,7 +1,6 @@
 package com.rafael.gradeweb;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.lang.String;
 import android.os.Bundle;
@@ -13,17 +12,12 @@ import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.parse.ParseObject;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 public class MainActivityDrawer extends Activity {
@@ -126,7 +120,7 @@ public class MainActivityDrawer extends Activity {
                 args.putString("EMAIL", currentUser.getEmail());
                 break;
             case 1:
-                fragment = new PlaceholderFragment();
+                fragment = new FragmentoListaSemestresUsuario();
                 break;
             case 2:
                 fragment = new FragmentoDetalhesDisciplina();
@@ -226,6 +220,8 @@ public class MainActivityDrawer extends Activity {
         }
     }
 
+    /*
+
     public class PlaceholderFragment extends Fragment {
 
         private GradeWEBApplication myApp;
@@ -291,7 +287,7 @@ public class MainActivityDrawer extends Activity {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Toast.makeText(MainActivityDrawer.this, "You clicked" + (String) semestreList.get(position), 5000).show();
 
-                    fragment = new FragmentoListaSemestreUsuario();
+                    fragment = new FragmentoListaSemestresUsuario();
                     Bundle args = new Bundle();
 
                     args.putString("SEMESTRE",(String) semestreList.get(position));
@@ -308,5 +304,7 @@ public class MainActivityDrawer extends Activity {
         } // end of onCreateView
 
     } // end of PlaceholderFragment
+
+    */
 
 } //end of MainActivityDrawer
