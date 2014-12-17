@@ -11,6 +11,8 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseQueryAdapter;
 
+import java.util.ArrayList;
+
 /**
  * Created by Rafael Farias on 04/12/2014.
  */
@@ -20,6 +22,20 @@ public class CustomSpinnerAdapterDisciplinas extends ParseQueryAdapter {
         super(context, new ParseQueryAdapter.QueryFactory<ParseObject>() {
             public ParseQuery create() {
                 ParseQuery query = new ParseQuery("Disciplina");
+                query.whereExists("DID");
+                query.whereExists("name");
+                query.orderByAscending("DID");
+                return query;
+            }
+
+        });
+    }
+
+    public CustomSpinnerAdapterDisciplinas(Context context, final ArrayList listaDIDs) {
+        super(context, new ParseQueryAdapter.QueryFactory<ParseObject>() {
+            public ParseQuery create() {
+                ParseQuery query = new ParseQuery("Disciplina");
+                query.whereNotContainedIn("DID", listaDIDs);
                 query.whereExists("DID");
                 query.whereExists("name");
                 query.orderByAscending("DID");

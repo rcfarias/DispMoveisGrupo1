@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.PopupWindow;
@@ -47,17 +48,16 @@ public class FragmentoListaDisciplinasSemestreSelecionado extends Fragment{
     private ListView listaDisciplinas;
 
     public void setHorarioObject(ParseObject horario) {
-
         this.horarioObject = horario;
     }
 
     public FragmentoListaDisciplinasSemestreSelecionado() {}
 
-    public void resetAdapter(ArrayList listaIdsTurmas) {
+    /*public void resetAdapter(ArrayList listaIdsTurmas) {
         CustomAdapterListaDisciplinas mAdapter = new CustomAdapterListaDisciplinas(context, listaIdsTurmas);
         listaDisciplinas.setAdapter(mAdapter);
         mAdapter.loadObjects();
-    }
+    }*/
 
     @Override
     public void onAttach(Activity activity) {
@@ -80,6 +80,8 @@ public class FragmentoListaDisciplinasSemestreSelecionado extends Fragment{
         //listaDisciplinas.setAdapter(mAdapter);
         //mAdapter.loadObjects();
 
+
+        Log.d("onCreateView()", "rodei");
         updateAdapter();
 
         listaDisciplinas.setOnItemLongClickListener( new AdapterView.OnItemLongClickListener() {
@@ -121,12 +123,13 @@ public class FragmentoListaDisciplinasSemestreSelecionado extends Fragment{
 
                             try {
                                 horario.save();
-
-                                Toast.makeText(getActivity().getApplicationContext(), "Disciplina removida do horário", 5000).show();
-
                                 GradeWEBApplication.getInstance().setHorario(horario);
-                                updateAdapter();
-
+                                Log.d("dialog to rome course", "executei");
+                                ((BaseAdapter) listaDisciplinas.getAdapter()).notifyDataSetChanged();
+                                //updateAdapter();
+                                Toast.makeText(getActivity().getApplicationContext(), "Disciplina removida do horário", 5000).show();
+                                //tava aqui first
+                                isResumed();
                             }
                             catch (ParseException e) {
                                 e.printStackTrace();
@@ -198,10 +201,17 @@ public class FragmentoListaDisciplinasSemestreSelecionado extends Fragment{
                 //    Toast.makeText(getActivity(), "turmaId: " + (String) l.get(i), 5000).show();
                 //}
 
+
+
+
+
+
                 args.putStringArrayList("turmas_ids", l);
                 args.putString("semestre", getArguments().getString("semestre"));
                 intent.putExtras(args);
                 startActivity(intent, args);
+
+                //
 
             }
         });
@@ -212,6 +222,7 @@ public class FragmentoListaDisciplinasSemestreSelecionado extends Fragment{
     @Override
     public void onResume() {
         super.onResume();
+        Log.d("onResume()", "resuming");
         updateAdapter();
     }
 
@@ -220,10 +231,14 @@ public class FragmentoListaDisciplinasSemestreSelecionado extends Fragment{
 
         for(int j = 0; j < turmas.size(); j++) {
             listaIdsTurmas.add(turmas.get(j).getObjectId());
+            Log.d("Atualizando adapter", "j==" + j +" turma com professor : " + turmas.get(j).getString("professor"));
         }
 
         CustomAdapterListaDisciplinas mAdapter = new CustomAdapterListaDisciplinas(context, listaIdsTurmas);
+        listaDisciplinas.clearDisappearingChildren();
         listaDisciplinas.setAdapter(mAdapter);
         mAdapter.loadObjects();
+
+        //((BaseAdapter) listaDisciplinas.getAdapter()).notifyDataSetChanged();
     }
 }

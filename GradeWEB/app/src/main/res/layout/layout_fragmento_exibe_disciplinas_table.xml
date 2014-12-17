@@ -17,7 +17,8 @@
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/row_0_column_0"
-                android:text="Hora"/>
+                android:text="Hora"
+                android:layout_column="1"/>
             <TextView
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
@@ -56,12 +57,13 @@
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/row_1_column_0"
-                android:text="07:00"/>
+                android:text="07:00"
+                android:layout_column="0" />
             <TextView
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/row_1_column_1"
-                android:text="SEG"/>
+                android:text="SEGkjkjlkhlihoig;out7iiyltiuyo"/>
             <TextView
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
@@ -144,7 +146,7 @@
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/row_3_column_2"
-                android:text="TER"/>
+                android:text="TERdfh sdfh trmuyeryerhywrtyeuhbrhyjiy"/>
             <TextView
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"

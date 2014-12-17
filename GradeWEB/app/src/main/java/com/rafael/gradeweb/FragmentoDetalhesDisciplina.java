@@ -2,6 +2,7 @@ package com.rafael.gradeweb;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +29,8 @@ public class FragmentoDetalhesDisciplina extends Fragment {
 
     private TextView detalhesTextView;
     private ScrollView minhaScroolView;
-    private ListView disciplinasListView;
+    private Spinner listaDisciplinasSpinner;
+    private CustomSpinnerAdapterDisciplinas mSAd;
 
 
     private final String disciplinaLabel = "Disciplina";
@@ -38,77 +40,38 @@ public class FragmentoDetalhesDisciplina extends Fragment {
     }
 
     @Override
-    public View onCreateView( LayoutInflater inflater,
-                              ViewGroup container,
-                              Bundle savedInstance) {
+    public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstance) {
 
         final View viewRaiz = inflater.inflate(R.layout.layout_fragmento_detalhes_disciplina, container, false);
 
-        disciplinasListView = (ListView) viewRaiz.findViewById(R.id.listViewDisciplinas);
+        listaDisciplinasSpinner = (Spinner) viewRaiz.findViewById(R.id.lista_disciplina_spinner);
 
-        ParseQuery<ParseObject> listaDisciplinasQuery = ParseQuery.getQuery("Disciplina");
-        listaDisciplinasQuery.selectKeys(Arrays.asList("DID", "name"));
-        listaDisciplinasQuery.orderByAscending("DID");
-        listaDisciplinasQuery.fromLocalDatastore();
+        mSAd = new CustomSpinnerAdapterDisciplinas(getActivity());
+        listaDisciplinasSpinner.setAdapter(mSAd);
+        listaDisciplinasSpinner.setSelection(0);
+        mSAd.setPaginationEnabled(false);
 
-        List<ParseObject> listaDisciplinasObjects = null;
-        try {
-            listaDisciplinasObjects = listaDisciplinasQuery.find();
-        }
-        catch ( ParseException e) {
-            e.printStackTrace();
-        }
-
-        final ArrayList listaDisciplinasNomes = new ArrayList();
-
-        for(int j = 0; j < listaDisciplinasObjects.size(); j++) {
-            listaDisciplinasNomes.add(listaDisciplinasObjects.get(j).getString("DID") + " - " + listaDisciplinasObjects.get(j).getString("name"));
-        }
-
-        ArrayAdapter<ArrayList> adapter = new ArrayAdapter<ArrayList>(this.getActivity(),
-                android.R.layout.simple_expandable_list_item_1,
-                listaDisciplinasNomes);
-
-        disciplinasListView.setAdapter(adapter);
-
-        disciplinasListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+       listaDisciplinasSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                detalhesTextView = (TextView) viewRaiz.findViewById(R.id.detalhesTextView);
-
-                detalhesTextView.setText((String) listaDisciplinasNomes.get(position));
-
-
-                String nome = (String) listaDisciplinasNomes.get(position);
-                String[] parts = nome.split(" - ");
-
-                ParseQuery<ParseObject> disciplinaQuery = ParseQuery.getQuery("Disciplina");
-                disciplinaQuery.whereEqualTo("DID",(String) parts[0]);
-                disciplinaQuery.include("Unidade");
-                disciplinaQuery.selectKeys(Arrays.asList("description"));
-                disciplinaQuery.fromLocalDatastore();
-
-                //detalhesTextView.setText((String)  parts[0]);
-
-                List<ParseObject> disciplinaDescription = null;
-                try {
-                    disciplinaDescription = disciplinaQuery.find();
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                    detalhesTextView.setText("Deu EXCEPTION");
-                }
-
-                ParseObject obj = disciplinaDescription.get(0);
-
-                ParseObject uni = obj.getParseObject("Unidade");
-
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                ParseObject disc = (ParseObject) adapterView.getSelectedItem();
                 final String fimDeLinha = System.getProperty("line.separator");
 
-                detalhesTextView.setText(nome + fimDeLinha + uni.getString("name") + fimDeLinha + fimDeLinha  + (String) obj.getString("description"));
-                //detalhesTextView.setTextSize((float) 20.5);
-                //detalhesTextView.setText((String) disciplinaDescription.get(0).getString("descriprion"));
+                Log.d("Spinner", "Item selected = " + disc.getString("DID"));
 
+                detalhesTextView = (TextView) viewRaiz.findViewById(R.id.detalhesTextView);
 
+                detalhesTextView.setText(disc.getString("DID") + " " + disc.getString("name") +
+                                         fimDeLinha + fimDeLinha + disc.getString("description"));
+
+                ScrollView sc = (ScrollView) viewRaiz.findViewById(R.id.scrollView);
+
+                sc.pageScroll(View.FOCUS_UP);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                Log.d("Spinner", "nada selecionado");
             }
         });
 

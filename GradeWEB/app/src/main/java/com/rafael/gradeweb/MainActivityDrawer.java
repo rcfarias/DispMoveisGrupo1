@@ -75,13 +75,13 @@ public class MainActivityDrawer extends Activity {
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow,GravityCompat.START);
 
         // Add Drawer Item to dataList
-        dataList.add(new DrawerItem("User", R.drawable.ic_action_user));
+        dataList.add(new DrawerItem("Usuário", R.drawable.ic_action_user));
         dataList.add(new DrawerItem("Semestres", R.drawable.ic_action_account));
-        dataList.add(new DrawerItem("Consulta Dsicplina", R.drawable.ic_action_video));
+        dataList.add(new DrawerItem("Consulta Disciplina", R.drawable.ic_action_video));
         //dataList.add(new DrawerItem("Import & Export", R.drawable.ic_action_import_export));
-        dataList.add(new DrawerItem("About", R.drawable.ic_action_about));
-        dataList.add(new DrawerItem("Settings", R.drawable.ic_action_settings));
-        dataList.add(new DrawerItem("Help", R.drawable.ic_action_help));
+        //dataList.add(new DrawerItem("About", R.drawable.ic_action_about));
+        //dataList.add(new DrawerItem("Settings", R.drawable.ic_action_settings));
+        //dataList.add(new DrawerItem("Help", R.drawable.ic_action_help));
         dataList.add(new DrawerItem("Log Out", R.drawable.ic_action_logout_dark));
 
         adapter = new CustomDrawerAdapter(this, R.layout.custom_drawer_item,dataList);
@@ -122,6 +122,8 @@ public class MainActivityDrawer extends Activity {
 
     public void SelectItem(int possition) {
 
+        String tag = "";
+
         fragment = null;
         Bundle args = new Bundle();
         switch (possition) {
@@ -129,32 +131,17 @@ public class MainActivityDrawer extends Activity {
                 fragment = new FragmentProfile();
                 args.putString("USER_NAME", currentUser.getString("name"));
                 args.putString("EMAIL", currentUser.getEmail());
+                tag+=  "FRAGMENTO_PROFILE";
                 break;
             case 1:
                 fragment = new FragmentoListaSemestresUsuario();
+                tag+=  "FRAGMENTO_LISTA_SEMESTRES";
                 break;
             case 2:
                 fragment = new FragmentoDetalhesDisciplina();
+                tag+=  "FRAGMENTO_DETALHES_DISCIPLINAS";
                 break;
             case 3:
-                fragment = new FragmentOne();
-                args.putString(FragmentOne.ITEM_NAME, dataList.get(possition).getItemName());
-                args.putInt(FragmentOne.IMAGE_RESOURCE_ID, dataList.get(possition).getImgResID());
-                break;
-            case 4:
-                fragment = new FragmentOne();
-                args.putString(FragmentOne.ITEM_NAME, dataList.get(possition).getItemName());
-                args.putInt(FragmentOne.IMAGE_RESOURCE_ID, dataList.get(possition).getImgResID());
-                break;
-            case 5:
-                fragment = new FragmentOne();
-                args.putString(FragmentOne.ITEM_NAME, dataList.get(possition).getItemName());
-                args.putInt(FragmentOne.IMAGE_RESOURCE_ID, dataList.get(possition).getImgResID());
-                break;
-            case 6:
-                fragment = new FragmentOne();
-                args.putString(FragmentOne.ITEM_NAME, dataList.get(possition).getItemName());
-                args.putInt(FragmentOne.IMAGE_RESOURCE_ID, dataList.get(possition).getImgResID());
                 break;
             default:
                 break;
@@ -163,8 +150,15 @@ public class MainActivityDrawer extends Activity {
 
         fragment.setArguments(args);
         frgManager = getFragmentManager();
-        frgManager.beginTransaction().replace(R.id.content_frame, fragment)
-                .commit();
+
+        if(frgManager.getBackStackEntryCount() ==1) {
+            frgManager.popBackStackImmediate();
+        }
+
+        frgManager.beginTransaction()
+                   .replace(R.id.content_frame, fragment, tag)
+                   //.addToBackStack(tag)
+                   .commit();
 
         mDrawerList.setItemChecked(possition, true);
         setTitle(dataList.get(possition).getItemName());
@@ -209,12 +203,12 @@ public class MainActivityDrawer extends Activity {
         public void onItemClick(AdapterView<?> parent, View view, int position,
                                 long id) {
 
-            if(position != 6){
-                Log.d(TAG, "position != 6 @OnItemClickListener");
+            if(position != 3){
+                Log.d(TAG, "position != 3 @OnItemClickListener");
                 SelectItem(position);
             }
             else {
-                Log.d(TAG, "position == 6 @OnItemClickListener");
+                Log.d(TAG, "position == 3 @OnItemClickListener");
                 if(currentUser != null) {
                     Log.d(TAG, "currentUser != null @OnItemClickListener");
                     //ParseUser.logOut();
@@ -230,6 +224,12 @@ public class MainActivityDrawer extends Activity {
 
 
         }
+    }
+
+    public void updateDrawer(int pos) {
+        mDrawerList.setItemChecked(pos, true);
+        setTitle(dataList.get(pos).getItemName());
+        mDrawerLayout.closeDrawer(mDrawerList);
     }
 
 } //end of MainActivityDrawer

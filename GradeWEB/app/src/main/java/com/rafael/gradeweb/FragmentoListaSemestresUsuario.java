@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -91,9 +92,56 @@ public class FragmentoListaSemestresUsuario extends Fragment {
                 fragment.setHorarioObject(horario);
                 fragment.setArguments(args);
                 frgManager = getFragmentManager();
-                frgManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+
+                frgManager.beginTransaction()
+                          //.add(fragment, "Detalha disciplinas do horario")
+                          .replace(R.id.content_frame, fragment)
+                          .addToBackStack("teste")
+                          .commit();
+                         //.replace(R.id.content_frame, fragment).commit();
             }
         });
+/*
+        listaSemestresListView.setOnItemLongClickListener( new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long l) {
+                final ParseObject horario = (ParseObject) adapterView.getItemAtPosition(position);
+
+                // 1. Instantiate an AlertDialog.Builder with its constructor
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+                // 2. Chain together various setter methods to set the dialog characteristics
+                builder.setMessage("Isso removerá este horário")
+                        .setTitle("Excluir o semestre selecionado?");
+
+                // Add the buttons
+                builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User clicked OK button
+
+                        try {
+                            horario.delete();
+                            Toast.makeText(getActivity().getApplicationContext(), "Horário removido com sucesso", 5000).show();
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getActivity().getApplicationContext(), "Não foi possível excluir! Tente novamente mais tarde!!", 5000).show();
+                        }
+                    }
+                });
+                builder.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User cancelled the dialog
+                    }
+                });
+
+                // 3. Get the AlertDialog from create()
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
+                return false;
+            }
+        });
+*/
 
         adicionarButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,7 +155,7 @@ public class FragmentoListaSemestresUsuario extends Fragment {
 
 
                 // 2. Chain together various setter methods to set the dialog characteristics
-                builder.setMessage("Informe o semestre a ser adicionado:")
+                builder.setMessage("Informe o semestre a ser adicionado: (ex.: 2014.2)")
                         .setTitle("Adicionar semestre");
 
                 builder.setView(input);
@@ -120,63 +168,68 @@ public class FragmentoListaSemestresUsuario extends Fragment {
                         String semestre = input.getText().toString();
                         // Do something with value!
 
-                        Log.d("positiveButton", "semestre informado = " + semestre);
+                        System.out.println("SEMESTRE INSERIDO = " + semestre + "XC");
 
-                        ParseQuery semestreQuery = new ParseQuery("Semestre");
-                        semestreQuery.whereEqualTo("codigoSemestre", semestre);
+                        //if(semestre.matches("20%02d.%01d")) { // true)
 
-                        try {
-                            ParseObject semestreObject = semestreQuery.getFirst();
 
-                            if(semestreObject != null) {
+                            Log.d("positiveButton", "semestre informado = " + semestre);
 
-                                Log.d("positiveButton", "objeto semestre foi diferente de null");
+                            ParseQuery semestreQuery = new ParseQuery("Semestre");
+                            semestreQuery.whereEqualTo("codigoSemestre", semestre);
 
-                                if (semestreObject.getBoolean("isDisponivel")) {
+                            try {
+                                ParseObject semestreObject = semestreQuery.getFirst();
 
-                                    Log.d("positiveButton", "semestre isDisponivel!!");
+                                if (semestreObject != null) {
 
-                                    ParseQuery horarioQuery = new ParseQuery("Horario");
-                                    horarioQuery.whereEqualTo("usuario", GradeWEBApplication.getInstance().getUsuario());
-                                    horarioQuery.whereEqualTo("semestre", semestre);
+                                    Log.d("positiveButton", "objeto semestre foi diferente de null");
 
-                                    try {
-                                        ParseObject horarioObject = horarioQuery.getFirst();
+                                    if (semestreObject.getBoolean("isDisponivel")) {
 
-                                        Log.d("positiveButton", "horarioObject NÃo foi null... NÃO posso criar o horario");
+                                        Log.d("positiveButton", "semestre isDisponivel!!");
 
-                                        Toast.makeText(getActivity().getApplicationContext(), "Não foi possível criar horário. Horário já cadastrado para o semestre especificado!", 5000).show();
+                                        ParseQuery horarioQuery = new ParseQuery("Horario");
+                                        horarioQuery.whereEqualTo("usuario", GradeWEBApplication.getInstance().getUsuario());
+                                        horarioQuery.whereEqualTo("semestre", semestre);
+
+                                        try {
+                                            ParseObject horarioObject = horarioQuery.getFirst();
+
+                                            Log.d("positiveButton", "horarioObject NÃo foi null... NÃO posso criar o horario");
+
+                                            Toast.makeText(getActivity().getApplicationContext(), "Não foi possível criar horário. Horário já cadastrado para o semestre especificado!", 5000).show();
+                                        } catch (ParseException e) {
+
+                                            Log.d("positiveButton", "horarioObject foi null, posso criar o horario");
+
+                                            ParseObject novoHorario = new ParseObject("Horario");
+                                            novoHorario.put("usuario", GradeWEBApplication.getInstance().getUsuario());
+                                            novoHorario.put("semestre", semestre);
+                                            novoHorario.put("turmas", new ArrayList());
+                                            novoHorario.save();
+
+                                            GradeWEBApplication.getInstance().setHorario(novoHorario);
+                                            updateAdapter();
+                                        }
+                                    } else {
+
+                                        Log.d("positiveButton", "semestre !isDisponivel");
+
+                                        Toast.makeText(getActivity().getApplicationContext(), "Não foi possível criar horário. Semestre não está disponível!", 5000).show();
                                     }
-                                    catch (ParseException e) {
-
-                                        Log.d("positiveButton", "horarioObject foi null, posso criar o horario");
-
-                                        ParseObject novoHorario = new ParseObject("Horario");
-                                        novoHorario.put("usuario", GradeWEBApplication.getInstance().getUsuario());
-                                        novoHorario.put("semestre", semestre);
-                                        novoHorario.put("turmas", new ArrayList());
-                                        novoHorario.save();
-
-                                        GradeWEBApplication.getInstance().setHorario(novoHorario);
-                                        updateAdapter();
-                                    }
+                                } else {
+                                    Toast.makeText(getActivity().getApplicationContext(), "Não foi possível criar horário. Não há registros desse semestre!", 5000).show();
                                 }
-                                else {
 
-                                    Log.d("positiveButton", "semestre !isDisponivel");
-
-                                    Toast.makeText(getActivity().getApplicationContext(), "Não foi possível criar horário. Semestre não está disponível!", 5000).show();
-                                }
-                            }
-                            else {
-                                Toast.makeText(getActivity().getApplicationContext(), "Não foi possível criar horário. Não há registros desse semestre!", 5000).show();
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                                Toast.makeText(getActivity().getApplicationContext(), "Não foi possível criar horário. Tente novamente mais tarde!", 5000).show();
                             }
 
-                        }
-                        catch (ParseException e) {
-                            e.printStackTrace();
-                            Toast.makeText(getActivity().getApplicationContext(), "Não foi possível criar horário. Tente novamente mais tarde!", 5000).show();
-                        }
+                        //}
+                        //else
+                            //Toast.makeText(getActivity().getApplicationContext(), "Não foi possível criar horário. Formato de semestre inválido!", 5000).show();
 
 
                     }

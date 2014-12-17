@@ -1,6 +1,8 @@
 package com.rafael.gradeweb;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -8,6 +10,7 @@ import android.content.Intent;
 
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -34,6 +37,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import android.util.Log;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -116,7 +120,7 @@ public class LoginActivity extends Activity {
                             .setParseSignupButtonText("Cadastrar")
                             .setParseLoginHelpText("Esqueceu a senha?")
                             .setParseLoginInvalidCredentialsToastText("Seu email e/ou senha não está correto")
-                            .setParseLoginEmailAsUsername(true)
+                            .setParseLoginEmailAsUsername(false)
                             .setParseSignupSubmitButtonText("Registrar")
                             .setFacebookLoginEnabled(true)
                             .setFacebookLoginButtonText("Facebook")
@@ -188,39 +192,58 @@ public class LoginActivity extends Activity {
         }
         loginOrLogoutButton.setText(R.string.profile_logout_button_label);
 
-        /*
-        // Query for the Horario objects from Parse.
-        ParseQuery<ParseObject> horariosUsuarioQuery = ParseQuery.getQuery(horarioLabel);
-        horariosUsuarioQuery.whereEqualTo("usuario", myApplication.getUsuario());
-        horariosUsuarioQuery.include("turmas");
-        horariosUsuarioQuery.include("turmas.disciplina");
-        //horariosUsuarioQuery.include("turmas.");
-        horariosUsuarioQuery.findInBackground(new FindCallback<ParseObject>() {
-            public void done(final List<ParseObject> listaHorariosUsuario, ParseException e) {
-                if (e != null) {
-                    // There was an error or the network wasn't available.
-                    return;
-                }
+        if(currentUser.getBoolean("termoAceite")) {
+            Intent intent = new Intent(this, MainActivityDrawer.class);
+            startActivity(intent);
+            //finish();
+        }
+        else {
 
-                // Release any objects previously pinned for this query.
-                ParseObject.unpinAllInBackground(horarioLabel, listaHorariosUsuario, new DeleteCallback() {
-                    public void done(ParseException e) {
-                        if (e != null) {
-                            // There was some error.
-                            return;
-                        }
+            ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("TermoAceite");
 
-                        // Add the latest results for this query to the cache.
-                        ParseObject.pinAllInBackground(horarioLabel, listaHorariosUsuario);
+            ParseObject termo = null;
+
+            try {
+                termo = query.getFirst();
+
+                // 1. Instantiate an AlertDialog.Builder with its constructor
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+                // 2. Chain together various setter methods to set the dialog characteristics
+                builder.setMessage(termo.getString("termoUso"))
+                        .setTitle("Termo de aceite");
+
+                // Add the buttons
+                builder.setPositiveButton("Concordo", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                        currentUser.put("termoAceite", true);
+                        currentUser.saveInBackground();
+
+                        Intent intent = new Intent(getApplicationContext(), MainActivityDrawer.class);
+                        startActivity(intent);
+
                     }
                 });
+                builder.setNegativeButton("Discordo", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User cancelled the dialog
+                        GradeWEBApplication.getInstance().logoutUsuario();
+                        finish();
+                    }
+                });
+
+                // 3. Get the AlertDialog from create()
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
+
+            } catch (ParseException e) {
+                e.printStackTrace();
             }
-        });
-        */
 
-        Intent intent = new Intent(this, MainActivityDrawer.class);
-        startActivity(intent);
 
+        }
     }
 
     /**

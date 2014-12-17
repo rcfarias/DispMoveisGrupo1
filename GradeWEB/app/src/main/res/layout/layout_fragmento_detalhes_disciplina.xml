@@ -11,21 +11,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/consultaTextView"
-        android:text="Selecione uma disiplinar para mais detalhes: "
+        android:text="Selecione uma disciplina para mais detalhes: "
         android:textSize="20.5sp"
         android:gravity="center"/>
 
 
-    <ListView
+    <Spinner
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:id="@+id/listViewDisciplinas"
-        android:layout_gravity="center"
-        android:paddingBottom="20dp"
-        android:paddingTop="20dp"
-        android:background="#FFFFFF">
-
-        </ListView>
+        android:layout_height="60dp"
+        android:id="@+id/lista_disciplina_spinner">
+    </Spinner>
 
 
     <TextView
@@ -47,7 +42,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/detalhesTextView"
-
-            android:textSize="22.5sp"/>
+            android:textSize="18.5sp"/>
     </ScrollView>
 </LinearLayout>
